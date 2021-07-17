@@ -54,8 +54,17 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
+    if 'cu ngan' in str.lower(message.content):
+        await message.reply('May cu ngan do {message.author.name}', mention_author=True)
+
+    if 'chao kai' in str.lower(message.content):
+        await message.reply(f'Xin chao {message.author.name}, tao la KAI')
+
+    if 'dep trai nhat' in str.lower(message.content):
+        await message.channel.send('Kaylode dep trai nhat')
+
+    if 'cu bu nhat' in str.lower(message.content) or 'cu to nhat' in str.lower(message.content) or 'cu dai nhat' in str.lower(message.content):
+        await message.channel.send('Kaylode cu bu va dai nhat')
 
     if message.content.startswith('$url'):
         global url
