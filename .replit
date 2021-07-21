@@ -1,2 +1,2 @@
 language = "python3"
-run = "python kai.py"
+run = "python run.py"
