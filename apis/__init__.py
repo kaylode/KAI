@@ -2,6 +2,7 @@ from .food_api import FoodAPI
 from .dictionary import Dictionary
 from .translate_api import GoogleTranslationAPI
 from .helper import Helper
+from .voice_api import GoogleVoiceAPI
 
 def get_api(name):
     if name == 'dictionary':
@@ -12,3 +13,5 @@ def get_api(name):
         return GoogleTranslationAPI()
     if name == 'helper':
         return Helper()
+    if name == 'voiceapi':
+        return GoogleVoiceAPI()

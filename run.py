@@ -11,6 +11,7 @@ from replit import db
 from server import keep_alive
 from bot import KAI
 from configs import get_config
+from apis import GoogleVoiceAPI
 
 # Discord client
 description = '''
@@ -24,6 +25,8 @@ client = commands.Bot(command_prefix='$', description=description, intents=inten
 # KAI initilization
 config = get_config("KAI")
 bot = KAI(config)
+ctx = None
+voice_on = False
 
 @client.event
 async def on_ready():
@@ -31,29 +34,54 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    global voice_on
+
     if message.author == client.user:
         return
-
-    # Join voice
-    if message.content.startswith('$join_voice'):
-        ctx = await client.get_context(message)
-        channel = ctx.author.voice.channel
-        await channel.connect()
 
     # Process message and get response 
     response, reply = bot.response(message)
 
+    # Voice on/off
+    if message.content.startswith('$voice'):
+        type = message.content.split('$voice')[-1]
+        if type == 'on':
+            voice_on = True
+            response = '[Info] Voice reply on'
+        elif type == 'off':
+            voice_on = False
+            response = '[Info] Voice reply off'
+        else:
+            response = '[Error] Wrong command. Use $voice on/off only'
+
+    # Deal with response
     if response is not None:
         if isinstance(response, discord.File):
             # Image file
             await message.channel.send(file=response)
+        elif isinstance(response, discord.PCMVolumeTransformer):
+            global ctx
+            if ctx is None: # If hasn't joined, join voice channel
+                ctx = await client.get_context(message)
+                channel = ctx.author.voice.channel
+                await channel.connect()
+            ctx.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
         else:
             if reply:   
                 # Mention author
                 await message.reply(response, mention_author=True)
             else:
                 # Send message
-                await message.channel.send(response)
+                if voice_on:
+                    global ctx
+                    if ctx is None: # If hasn't joined, join voice channel
+                        ctx = await client.get_context(message)
+                        channel = ctx.author.voice.channel
+                        await channel.connect()
+                    response = GoogleVoiceAPI.speak(text=response, lang='vi')
+                    ctx.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
+                else:
+                    await message.channel.send(response)
 
         # bot.set_database(message, db)
 
