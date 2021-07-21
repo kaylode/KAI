@@ -1,6 +1,5 @@
 language = "python3"
 run = """
-sudo apt-get install sox libsox-fmt-mp3
 pip install -r requirements.txt
 python run.py
 """

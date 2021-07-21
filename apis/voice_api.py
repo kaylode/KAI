@@ -1,5 +1,6 @@
 from .base import API
-from google_speech import Speech
+from gtts import gTTS
+
 import discord
 
 class GoogleVoiceAPI(API):
@@ -14,17 +15,11 @@ class GoogleVoiceAPI(API):
     def do_command(self, command):
         text = "Hello World"
         lang = "en"
-        speech = Speech(text, lang)
-        # speech.play()
-
-        # # you can also apply audio effects while playing (using SoX)
-        # # see http://sox.sourceforge.net/sox.html#EFFECTS for full effect documentation
-        # sox_effects = ("speed", "1.5")
-        # speech.play(sox_effects)
-
-        # save the speech to an MP3 file (no effect is applied)
-
+  
         filename = "output.mp3"
+        
+        # Saving the converted audio in a mp3 file
+        speech = gTTS(text=text, lang=lang, slow=False)
         speech.save(filename)
 
         response = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(filename))
