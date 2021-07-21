@@ -1,5 +1,6 @@
 import random
 from unidecode import unidecode
+import json
 from replit import db
 
 def clean_text(text):
@@ -20,8 +21,27 @@ class Dictionary:
     def __init__(self) -> None:
         self.trigger = ""
         self.db = None
+        db = self.load_database()
         self.set_database(db)
 
+    def save_database(self, path='./database/db.json'):
+        """
+        Save database to json file
+        """
+        with open(path, 'w') as f:
+            json.dump(self.db, f)
+        
+        response = "[Info] Saved database"
+        return response, False
+
+    def load_database(self, path='./database/db.json'):
+        """
+        Load database from json
+        """
+        with open(path, 'r') as f:
+            data = json.load(f)
+        return data
+        
     def set_database(self, database):
         """
         Use repl database for storing sentences
@@ -80,6 +100,8 @@ class Dictionary:
             key =  clean_text(key)# No Vietnamese accent
             value = value.lstrip().rstrip()  
             response, reply = self.update_database('words',key,value)
+        elif command.startswith("$savedb"):
+            response, reply = self.save_database()
         else:
             # Get list of responses based on keywords in database and user messages 
             responses_list = []
