@@ -102,12 +102,13 @@ class Dictionary:
             response, reply = self.update_database('words',key,value)
         elif command.startswith("$savedb"):
             response, reply = self.save_database()
-        else:
+        elif not command.startswith("$"):
             # Get list of responses based on keywords in database and user messages 
             responses_list = []
             for key, value in self.db['words'].items():
                 command = clean_text(command)
                 if key in command:
+                    reply = True
                     response = self.random_response_from_list(value)
                     responses_list.append(response)
             
