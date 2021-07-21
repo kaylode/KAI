@@ -40,7 +40,7 @@ class Dictionary:
         if command.startswith("$updatew"):
             tokens = command.split('$updatew')
             key, value = tokens[-1].split('|')
-            key = key.lstrip().rstrip()
+            key = key.lstrip().rstrip().lower()
             value = value.lstrip().rstrip()
             response, reply = self.update_database('words',key,value)
         else:
@@ -51,7 +51,7 @@ class Dictionary:
                     responses_list.append(response)
             
             response = self.random_response_from_list(responses_list)
-            response = format(response, dict)
+            response = self.format(response, dict)
             reply = False
         return response, reply
         
