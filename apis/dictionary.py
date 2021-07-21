@@ -19,14 +19,14 @@ class Dictionary:
             self.db[type][key].append(value)
             response = "[Info] Updated database"
         except Exception as e:
-            response = "[Error] " + e
+            response = "[Error] " + str(e)
         return response, False
 
     def delete_database(self, type, key, index):
         try:
             self.db[type][key].pop(index)
         except Exception as e:
-            response = "[Error] " + e
+            response = "[Error] " + str(e)
         return response, False
 
     def random_response_from_list(self, responses):
