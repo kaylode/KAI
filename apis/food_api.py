@@ -90,7 +90,7 @@ class FoodAPI(API):
             "url": image_url, 
             "model_types": 'yolov5m',
             'ensemble': True,
-            'min_conf': 0.1,
+            'min_conf': 0.15,
             'min_iou': 0.5,
             'enhanced': False}
 
