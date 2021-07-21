@@ -1,9 +1,14 @@
 from apis import get_api
 
 class Bot:
+    """
+    Abstract class for Discord bot
+    """
     def __init__(self, config) -> None:
         self.config = config
         self.apis = []
+
+        # Init all apis instances
         self.init_features()
 
     def init_features(self):

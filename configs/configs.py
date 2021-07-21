@@ -1,6 +1,9 @@
 import yaml
 
 class Config():
+    """
+    Config class to read YAML file
+    """
     def __init__(self, yaml_path):
         yaml_file = open(yaml_path)
         _attr = yaml.load(yaml_file, Loader=yaml.FullLoader)['settings']
