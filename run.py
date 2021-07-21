@@ -5,19 +5,25 @@ https://github.com/Rapptz/discord.py/tree/v1.7.3/examples
 
 import os
 import discord
+from discord.ext import commands
+
 from replit import db
 from server import keep_alive
-
 from bot import KAI
 from configs import get_config
 
 # Discord client
-client = discord.Client()
+description = '''
+An example bot to showcase the discord.ext.commands extension
+module.
+There are a number of utility commands being showcased here.
+'''
+intents = discord.Intents.default()
+client = commands.Bot(command_prefix='$', description=description, intents=intents)
 
 # KAI initilization
 config = get_config("KAI")
 bot = KAI(config)
-
 
 @client.event
 async def on_ready():
@@ -27,6 +33,12 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
+
+    # Join voice
+    if message.content.startswith('$join_voice'):
+        ctx = await client.get_context(message)
+        channel = ctx.author.voice.channel
+        await channel.connect()
 
     # Process message and get response 
     response, reply = bot.response(message)
