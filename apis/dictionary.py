@@ -14,20 +14,31 @@ class Dictionary:
 
     def update_database(self, type, key, value):
         try:
-            self.db[type][key] = value
+            if key not in self.db[type].keys():
+                self.db[type][key] = []
+            self.db[type][key].append(value)
             response = "[Info] Updated database"
         except Exception as e:
             response = "[Error] " + e
+        return response, False
 
+    def delete_database(self, type, key, index):
+        try:
+            self.db[type][key].pop(index)
+        except Exception as e:
+            response = "[Error] " + e
         return response, False
 
     def random_response_from_list(self, responses):
         return random.choice(responses)
 
-    def do_command(self, command):
+    def format(self, string, dict):
+        return string.format(**dict)
         
-        if command.startswith("updatew"):
-            tokens = command.split('updatew')
+    def do_command(self, command, dict=None):
+        
+        if command.startswith("$updatew"):
+            tokens = command.split('$updatew')
             key, value = tokens[-1].split('|')
             key = key.lstrip().rstrip()
             value = value.lstrip().rstrip()
@@ -36,10 +47,11 @@ class Dictionary:
             responses_list = []
             for key, value in self.db['words'].items():
                 if key in str.lower(command):
-                    response = value
+                    response = self.random_response_from_list(value)
                     responses_list.append(response)
             
             response = self.random_response_from_list(responses_list)
+            response = format(response, dict)
             reply = False
         return response, reply
         

@@ -13,10 +13,19 @@ class KAI(Bot):
             if message.content.startswith(api_object.trigger):
                 if api_object.trigger != '':
                     command = message.content.split(api_object.trigger)[-1].lstrip().rstrip()
+                    response, reply = api_object.do_command(command)
                 else:
                     command = message.content
-                response, reply = api_object.do_command(command)
-                break
+                    dict = {
+                        'name': message.author.name
+                    }
+                    response, reply = api_object.do_command(command, dict)
+
+                # Safe key for only one api is called at the time
+                # If use more than one at the same time, consider removing this
+                if response is not None:
+                    break
+                
         return response, reply
 
     def set_database(message, database):
