@@ -26,7 +26,7 @@ class FoodAPI(API):
         # Set API url (because this API url not stable)
         # Example call: $food url google.com
         if command.startswith("url"):
-            new_url = command.split('url')[-1]
+            new_url = command.split('url')[-1].lstrip().rstrip()
             response = f'[Info] Server set at {new_url}'
             reply = False
             self.set_server_url(new_url)
@@ -103,7 +103,7 @@ class FoodAPI(API):
             img_bytes, filename = response
             if img_bytes:
                 buffer = BytesIO(img_bytes)
-                buffer, filename
+                return buffer, filename
             else:
                 return None
         else:
