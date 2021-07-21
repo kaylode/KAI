@@ -1,3 +1,8 @@
+"""
+Discord Docs
+https://github.com/Rapptz/discord.py/tree/v1.7.3/examples
+"""
+
 import os
 import discord
 from replit import db
