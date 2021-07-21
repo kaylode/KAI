@@ -2,10 +2,10 @@
 
 help_dict = {
     'food': {
-        'url': "Set ngrok server API",
-        'predict': "Detect food from image"
+        'url': "\t\t\t\tSet ngrok server API",
+        'predict': "\t\t\tDetect food from image"
     },
-    'translate': 'Translate a text in double quotes. Example: $translate "hello"',
+    'translate': '\t\t\tTranslate text in double quotes. Ex: $translate "hello"',
 }
 
 class Helper:
@@ -19,13 +19,13 @@ class Helper:
         """
         Execute command
         """
-        response = None
         reply = False
-    
+
+        response = ""
         for key in help_dict.keys():
             command = command.rstrip().lstrip()
             if command == key or command == "":
-                response = f"{key}: "
+                response += f"{key}: "
                 details = help_dict[key] # Dict or string
                 if isinstance(details, dict):
                     response += "\n"
