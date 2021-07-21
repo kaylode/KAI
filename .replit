@@ -1,2 +1,5 @@
 language = "python3"
-run = "python run.py"
+run = """
+pip install -r requirements.txt
+python run.py
+"""
