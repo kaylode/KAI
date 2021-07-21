@@ -37,8 +37,13 @@ class FoodAPI(API):
             image_url = command.split('predict')[-1]
 
             # Construct discord File from buffer and filename
-            buffer, filename = self.get_prediction(image_url)
-            response = discord.File(buffer, filename)
+            response = self.get_prediction(image_url)
+
+            if response is not None:
+                buffer, filename = response
+                response = discord.File(buffer, filename)
+            else:
+                response = "[Error] Wrong server url or server is inaccessible right now" 
             reply = False
 
         return response, reply
@@ -90,11 +95,17 @@ class FoodAPI(API):
             'enhanced': False}
 
         payload = json.dumps(data)
-        
-        # Bytes received, store to buffer
-        img_bytes, filename = self.send_request(self.url, payload, type='post', headers=headers)
-        if img_bytes:
-            buffer = BytesIO(img_bytes)
 
-        return buffer, filename
+        # Send request
+        response = self.send_request(self.url, payload, type='post', headers=headers)
+        if response is not None:
+            # Bytes received, store to buffer
+            img_bytes, filename = response
+            if img_bytes:
+                buffer = BytesIO(img_bytes)
+                buffer, filename
+            else:
+                return None
+        else:
+            return None
             
