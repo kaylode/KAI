@@ -1,5 +1,17 @@
 import random
+from unidecode import unidecode
 from replit import db
+
+def clean_text(text):
+    """
+    Clean text:
+        - Strip space at the beginning and ending
+        - Remove Vietnamese accent
+        - Lowercase
+    """
+
+    return unidecode(text.lstrip().rstrip().lower())
+
 
 class Dictionary:
     """
@@ -65,14 +77,15 @@ class Dictionary:
             # Call example: $updatew hello KAI | hello there
             tokens = command.split('$updatew')
             key, value = tokens[-1].split('|')
-            key = key.lstrip().rstrip().lower()
-            value = value.lstrip().rstrip()
+            key =  clean_text(key)# No Vietnamese accent
+            value = value.lstrip().rstrip()  
             response, reply = self.update_database('words',key,value)
         else:
             # Get list of responses based on keywords in database and user messages 
             responses_list = []
             for key, value in self.db['words'].items():
-                if key in str.lower(command):
+                command = clean_text(command)
+                if key in command:
                     response = self.random_response_from_list(value)
                     responses_list.append(response)
             
