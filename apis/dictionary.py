@@ -1,7 +1,7 @@
 import random
 from unidecode import unidecode
 import json
-from replit import db
+# from replit import db
 
 def clean_text(text):
     """
