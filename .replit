@@ -1,5 +1,6 @@
 language = "python3"
 run = """
+pip install -U discord.py[voice]
 pip install -r requirements.txt
 python run.py
 """
