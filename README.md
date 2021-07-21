@@ -8,7 +8,8 @@
 - [ ] Meme storage
 - [ ] Covid 19 information
 - [ ] Stream music
-- [ ] Google Translate
+- [x] Google Translate
 
 ## References
 - https://www.freecodecamp.org/news/create-a-discord-bot-with-python/
+- Discord Docs: https://github.com/Rapptz/discord.py/tree/v1.7.3/examples
