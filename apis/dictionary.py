@@ -37,6 +37,8 @@ class Dictionary:
         
     def do_command(self, command, dict=None):
         
+        response = None
+        reply = False
         if command.startswith("$updatew"):
             tokens = command.split('$updatew')
             key, value = tokens[-1].split('|')
@@ -50,8 +52,9 @@ class Dictionary:
                     response = self.random_response_from_list(value)
                     responses_list.append(response)
             
-            response = self.random_response_from_list(responses_list)
-            response = self.format(response, dict)
-            reply = False
+            if len(responses_list) > 0:
+                response = self.random_response_from_list(responses_list)
+                response = self.format(response, dict)
+            
         return response, reply
         
