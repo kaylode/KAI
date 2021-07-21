@@ -1,0 +1,4 @@
+settings:
+  name: "KAI"
+  apis: ['dictionary', 'foodapi']
+    
