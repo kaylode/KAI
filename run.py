@@ -67,21 +67,17 @@ async def on_message(message):
                 await channel.connect()
             ctx.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
         else:
-            if reply:   
-                # Mention author
-                await message.reply(response, mention_author=True)
+            # Send message
+            if voice_on and reply:
+                global ctx
+                if ctx is None: # If hasn't joined, join voice channel
+                    ctx = await client.get_context(message)
+                    channel = ctx.author.voice.channel
+                    await channel.connect()
+                response = GoogleVoiceAPI.speak(text=response, lang='vi')
+                ctx.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
             else:
-                # Send message
-                if voice_on:
-                    global ctx
-                    if ctx is None: # If hasn't joined, join voice channel
-                        ctx = await client.get_context(message)
-                        channel = ctx.author.voice.channel
-                        await channel.connect()
-                    response = GoogleVoiceAPI.speak(text=response, lang='vi')
-                    ctx.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
-                else:
-                    await message.channel.send(response)
+                await message.channel.send(response)
 
         # bot.set_database(message, db)
 

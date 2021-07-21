@@ -115,6 +115,7 @@ class Dictionary:
             if len(responses_list) > 0:
                 response = self.random_response_from_list(responses_list)
                 response = self.format(response, dict)
+                reply = True
             
         return response, reply
         
