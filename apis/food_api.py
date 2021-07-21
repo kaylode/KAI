@@ -10,12 +10,15 @@ class FoodAPI(API):
     def __init__(self) -> None:
         super().__init__()
         self.trigger = "$food"
-        self.url = "http://3a737b1df87f.ngrok.io/api"
+        self.url = ""
 
     def do_command(self, command):
+        response = None
+        reply = False
+
         if command.startswith("url"):
             new_url = command.split('url')[-1]
-            response = f'Server set at {new_url}'
+            response = f'[Info] Server set at {new_url}'
             reply = False
             self.set_server_url(new_url)
 
@@ -61,7 +64,7 @@ class FoodAPI(API):
 
         payload = json.dumps(data)
         
-        img_bytes, filename = self.send_request(self, self.url, payload, type='post', headers=headers)
+        img_bytes, filename = self.send_request(self.url, payload, type='post', headers=headers)
         if img_bytes:
             buffer = BytesIO(img_bytes)
 

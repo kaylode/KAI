@@ -5,13 +5,19 @@ class KAI(Bot):
         super().__init__(config)
         self.name = config.name
 
-    def reponse(self, message):
+    def response(self, message):
         response = None
+        reply = False
+        
         for api_object in self.apis:
             if message.content.startswith(api_object.trigger):
-                response = api_object.do_command(message)
+                if api_object.trigger != '':
+                    command = message.content.split(api_object.trigger)[-1].lstrip().rstrip()
+                else:
+                    command = message.content
+                response, reply = api_object.do_command(command)
                 break
-        return response
+        return response, reply
 
     def set_database(message, database):
         return super().set_database(database)
