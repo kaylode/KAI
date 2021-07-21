@@ -4,7 +4,7 @@ from googletrans import Translator
 def find_text(text):      
   import re
   matches=re.findall(r'\"(.+?)\"',text)
-  return ",".join(matches)
+  return matches[0]
 
 class GoogleTranslationAPI(API):
     def __init__(self) -> None:
@@ -17,10 +17,12 @@ class GoogleTranslationAPI(API):
         reply = False
 
         # command ex: $translate "Hello"
-        text = find_text(command) # find texts in double quotes
-        result = self.translator.translate(text, dest='vi')
-        response = result.text
-
+        try:
+            text = find_text(command) # find texts in double quotes
+            result = self.translator.translate(text, dest='vi')
+            response = result.text
+        except Exception as e:
+            response = "[Error] " + str(e)
 
         return response, reply
         
