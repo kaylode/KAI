@@ -32,7 +32,7 @@ async def on_message(message):
             else:
                 await message.channel.send(response)
 
-        bot.set_database(message, db)
+        # bot.set_database(message, db)
 
 
 keep_alive()
