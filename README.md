@@ -8,7 +8,9 @@
 - [ ] Meme storage
 - [ ] Covid 19 information
 - [ ] Stream music
+- [ ] Voice control
 - [x] Google Translate
+- [x] Google Text-to-speech 
 
 ## References
 - https://www.freecodecamp.org/news/create-a-discord-bot-with-python/
