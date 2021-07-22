@@ -63,6 +63,18 @@ class Dictionary:
             response = "[Error] " + str(e)
         return response, False
 
+    def list_db(self):
+        """
+        List data from database
+        """
+        responses_list = []
+        keys = self.db['words'].keys()
+        for key in keys:
+            value = self.db['words'][key]
+            responses_list.append({key: value})
+        response = str(responses_list)
+        return response, False
+
     def delete_database(self, type, key, index):
         """
         Delete sentences from database
@@ -102,6 +114,8 @@ class Dictionary:
             response, reply = self.update_database('words',key,value)
         elif command.startswith("$savedb"):
             response, reply = self.save_database()
+        elif command.startswith("$listdb"):
+            response, reply = self.list_db()
         elif not command.startswith("$"):
             # Get list of responses based on keywords in database and user messages 
             responses_list = []
