@@ -4,6 +4,7 @@ from .translate_api import GoogleTranslationAPI
 from .helper import Helper
 from .voice_api import GoogleVoiceAPI
 from .kaylode_api import KaylodeAPI
+from .covid_api import CovidAPI
 from .alarm import Alarm
 
 def get_api(name):
@@ -19,5 +20,7 @@ def get_api(name):
         return GoogleVoiceAPI()
     if name == 'kaylodeapi':
         return KaylodeAPI()
-    if name == 'alarm':
-        return Alarm()
+    if name == 'covidapi':
+        return CovidAPI()
+    print("[Error] Wrong features name. Check .yaml file")
+    raise

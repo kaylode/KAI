@@ -7,13 +7,13 @@ class API:
     def do_command(self, command):
         pass
 
-    def send_request(self, url, data, type, headers=None):
+    def send_request(self, url, data, type, headers=None, **kwargs):
         if type == 'post':
             response = requests.post(url, data=data, headers=headers)
         elif type == 'get':
-            pass
+            response = requests.get(url, data=data, headers=headers)
 
-        return self.process_response(response)
+        return self.process_response(response, **kwargs)
 
-    def process_response(self, response):
+    def process_response(self, response, **kwargs):
         return response

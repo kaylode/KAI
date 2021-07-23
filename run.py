@@ -29,7 +29,7 @@ class MyClient(commands.Bot):
         self.channel_ids = [TEST_CHANNEL_ID] # need to be list for all text channels
 
         # create the background task and run it in the background
-        self.time_check_async.start()
+        # self.time_check_async.start()
 
     async def on_ready(self):
         print('We have logged in as {0.user}'.format(client))
