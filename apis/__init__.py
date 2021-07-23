@@ -3,6 +3,7 @@ from .dictionary import Dictionary
 from .translate_api import GoogleTranslationAPI
 from .helper import Helper
 from .voice_api import GoogleVoiceAPI
+from .kaylode_api import KaylodeAPI
 
 def get_api(name):
     if name == 'dictionary':
@@ -15,3 +16,5 @@ def get_api(name):
         return Helper()
     if name == 'voiceapi':
         return GoogleVoiceAPI()
+    if name == 'kaylodeapi':
+        return KaylodeAPI()

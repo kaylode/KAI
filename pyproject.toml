@@ -11,6 +11,8 @@ Flask = "^2.0.1"
 replit = "^3.1.0"
 googletrans = "^3.0.0"
 Unidecode = "^1.2.0"
+gTTS = "^2.2.3"
+pytz = "^2021.1"
 
 [tool.poetry.dev-dependencies]
 

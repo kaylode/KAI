@@ -1,6 +1,12 @@
 import random
 from unidecode import unidecode
 import json
+import datetime
+import pytz
+# set timezone asia/saigon
+
+tz = pytz.timezone("Asia/Saigon")
+
 # from replit import db
 
 def clean_text(text):
@@ -55,6 +61,8 @@ class Dictionary:
         Add more sentences to database
         """
         try:
+            if type not in self.db.keys():
+                self.db[type] = {}
             if key not in self.db[type].keys():
                 self.db[type][key] = []
             self.db[type][key].append(value)
@@ -63,14 +71,14 @@ class Dictionary:
             response = "[Error] " + str(e)
         return response, False
 
-    def list_db(self):
+    def list_db(self, type):
         """
         List data from database
         """
         responses_list = []
-        keys = self.db['words'].keys()
+        keys = self.db[type].keys()
         for key in keys:
-            value = self.db['words'][key]
+            value = self.db[type][key]
             responses_list.append({key: value})
         response = str(responses_list)
         return response, False
@@ -106,16 +114,24 @@ class Dictionary:
 
         # If update command is used 
         if command.startswith("$updatew"):
-            # Call example: $updatew hello KAI | hello there
+            # Call example: $updatew words | hello KAI | hello there
             tokens = command.split('$updatew')
-            key, value = tokens[-1].split('|')
+            k_type, key, value = tokens[-1].split('|')
             key =  clean_text(key)# No Vietnamese accent
-            value = value.lstrip().rstrip()  
-            response, reply = self.update_database('words',key,value)
+            value = value.lstrip().rstrip()
+            k_type = k_type.lstrip().rstrip()  
+            response, reply = self.update_database(k_type,key,value)
         elif command.startswith("$savedb"):
             response, reply = self.save_database()
+        elif command.startswith("$gettime"):
+            #Get current time
+            response = datetime.datetime.now(tz)
+            reply = False
         elif command.startswith("$listdb"):
-            response, reply = self.list_db()
+             # Call example: $listdb words
+            tokens = command.split('$listdb')
+            type = tokens[-1].lstrip().rstrip()
+            response, reply = self.list_db(type)
         elif not command.startswith("$"):
             # Get list of responses based on keywords in database and user messages 
             responses_list = []
