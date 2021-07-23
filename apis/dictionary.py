@@ -66,6 +66,7 @@ class Dictionary:
             if key not in self.db[type].keys():
                 self.db[type][key] = []
             self.db[type][key].append(value)
+            print(value)
             response = "[Info] Updated database"
         except Exception as e:
             response = "[Error] " + str(e)
@@ -112,41 +113,46 @@ class Dictionary:
         response = None
         reply = False
 
-        # If update command is used 
-        if command.startswith("$updatew"):
-            # Call example: $updatew words | hello KAI | hello there
-            tokens = command.split('$updatew')
-            k_type, key, value = tokens[-1].split('|')
-            key =  clean_text(key)# No Vietnamese accent
-            value = value.lstrip().rstrip()
-            k_type = k_type.lstrip().rstrip()  
-            response, reply = self.update_database(k_type,key,value)
-        elif command.startswith("$savedb"):
-            response, reply = self.save_database()
-        elif command.startswith("$gettime"):
-            #Get current time
-            response = datetime.datetime.now(tz)
-            reply = False
-        elif command.startswith("$listdb"):
-             # Call example: $listdb words
-            tokens = command.split('$listdb')
-            type = tokens[-1].lstrip().rstrip()
-            response, reply = self.list_db(type)
-        elif not command.startswith("$"):
-            # Get list of responses based on keywords in database and user messages 
-            responses_list = []
-            for key, value in self.db['words'].items():
-                command = clean_text(command)
-                if key in command:
+        try:
+            # If update command is used 
+            if command.startswith("$updatew"):
+                # Call example: $updatew words | hello KAI | hello there
+                tokens = command.split('$updatew')
+                k_type, key, value = tokens[-1].split('|')
+                key =  clean_text(key)# No Vietnamese accent
+                value = value.lstrip().rstrip()
+                k_type = k_type.lstrip().rstrip()  
+                response, reply = self.update_database(k_type,key,value)
+            elif command.startswith("$savedb"):
+                response, reply = self.save_database()
+            elif command.startswith("$gettime"):
+                #Get current time
+                response = datetime.datetime.now(tz)
+                reply = False
+            elif command.startswith("$listdb"):
+                # Call example: $listdb words
+                tokens = command.split('$listdb')
+                type = tokens[-1].lstrip().rstrip()
+                response, reply = self.list_db(type)
+            elif not command.startswith("$"):
+                # Get list of responses based on keywords in database and user messages 
+                responses_list = []
+                for key, value in self.db['words'].items():
+                    command = clean_text(command)
+                    if key in command:
+                        reply = True
+                        response = self.random_response_from_list(value)
+                        responses_list.append(response)
+                
+                # One message can contain many keys in database, so choose randomly
+                if len(responses_list) > 0:
+                    response = self.random_response_from_list(responses_list)
+                    response = self.format(response, dict)
                     reply = True
-                    response = self.random_response_from_list(value)
-                    responses_list.append(response)
-            
-            # One message can contain many keys in database, so choose randomly
-            if len(responses_list) > 0:
-                response = self.random_response_from_list(responses_list)
-                response = self.format(response, dict)
-                reply = True
+        
+        except Exception as e:
+            response = "[Error] " + str(e)
+            reply = False
             
         return response, reply
         
