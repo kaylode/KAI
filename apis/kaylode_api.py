@@ -35,7 +35,7 @@ class KaylodeAPI(API):
         # Example call: $ai detect https://xxxx/food.png
         # Example call: $ai classify https://xxxx/food.png
         if command.startswith('detect'):
-            image_url = command.split('detect')[-1].lstrip().rstrip()
+            image_url = command.split('detect')[-1]
 
             # Construct discord File from buffer and filename
             response = self.get_detection_prediction(image_url)
@@ -86,6 +86,7 @@ class KaylodeAPI(API):
         """
         # To change detection model hyperparams, change these number
         data = {
+            "task": "detection",
             "url": image_url, 
             "model_name": 'yolov5m',
             'min_conf': 0.25,
