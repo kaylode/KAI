@@ -1,11 +1,19 @@
 
 
 help_dict = {
-    'food': {
+    '$help': "\t\t\t\t Print usage guide of commands",
+    '$translate': '\t\t\tTranslate text in double quotes. Ex: $translate "hello"',
+    '$speak': '\t\t\t\tSpeak a message. Ex: $speak "hello"',
+    '$voice': '\t\t\t\tWhether to reply using voice. Ex: $voice on',
+    '$ai': {
+        'url': "\t\t\t\tSet ngrok server API",
+        'detect': "\t\t\tDetect objects from image"
+    },
+    '$food': {
         'url': "\t\t\t\tSet ngrok server API",
         'predict': "\t\t\tDetect food from image"
     },
-    'translate': '\t\t\tTranslate text in double quotes. Ex: $translate "hello"',
+    '$gettime': '\t\t\tGet system time'
 }
 
 class Helper:
