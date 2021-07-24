@@ -17,6 +17,9 @@ TEST_CHANNEL_ID = 865577241048383492
 ASTROMENZ_CHANNEL_ID = 760897275890368525
 
 class MyClient(commands.Bot):
+    """
+    Custom Client
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -26,10 +29,12 @@ class MyClient(commands.Bot):
         self.ctx = None
         self.voice_on = False
         
-        self.channel_ids = [TEST_CHANNEL_ID] # need to be list for all text channels
+        # Alarm
+        self.alarm = Alarm()
+        self.channel_ids = [TEST_CHANNEL_ID, ASTROMENZ_CHANNEL_ID] # need to be list for all text channels
 
         # create the background task and run it in the background
-        # self.time_check_async.start()
+        self.time_check_async.start()
 
     async def on_ready(self):
         print('We have logged in as {0.user}'.format(client))
@@ -38,8 +43,8 @@ class MyClient(commands.Bot):
     async def time_check_async(self):
         for channel_id in self.channel_ids:
             channel = self.get_channel(channel_id) # channel ID goes here
-            response = Alarm.time_check()
-            if channel is not None:
+            response = self.alarm.time_check()
+            if channel is not None and response is not None:
                 await channel.send(response)
 
     @time_check_async.before_loop

@@ -23,7 +23,7 @@ def pretty_format(dict, mapping_dict=None, index=False):
 
 class CovidAPI(API):
     """
-    Food detection API 
+    Covid19 Information API
     https://documenter.getpostman.com/view/10808728/SzS8rjbc
     """
     def __init__(self) -> None:

@@ -1,20 +1,16 @@
 import pytz
 import json
+import random
 from datetime import datetime
-from discord.ext import tasks, commands
 
 class Alarm:
     timezone = pytz.timezone('Asia/Saigon') # Set timezone to SG
-    loop_second = 10              # Loop every x seconds
+    loop_second = 60              # Background task loop every x seconds
     def __init__(self) -> None:
       self.trigger = ""
       self.db = None
       db = self.load_database()
       self.set_database(db)
-      self.morning = self.db['alarm']['morning']
-      self.noon = self.db['alarm']['noon']
-      self.afternoon = self.db['alarm']['afternoon']
-      self.evening = self.db['alarm']['evening']
 
     def load_database(self, path='./database/db.json'):
           """
@@ -32,14 +28,36 @@ class Alarm:
           if 'alarm' not in self.db.keys():
               self.db['alarm'] = {}
 
-    @staticmethod
-    def time_check(): 
+    def random_response_from_list(self, responses):
+        """
+        Get random response from list of responses
+        """
+        return random.choice(responses)
+
+    def set_alarm(self, time, notification):
+        """
+        Set time alarm and save to database
+        """
+        if time not in self.db['alarm'].keys():
+            self.db['alarm'][time] = []
+        self.db['alarm'][time].append(notification)
+
+    def check_alarm(self, time):
+        """
+        Check if time alarm, can be missed if loop_second is large, will look into it later
+        """
+        if time in self.db['alarm'].keys():
+            responses = self.db['alarm'][time]
+            response = self.random_response_from_list(responses)
+        else:
+            response = None
+        return response
+
+    def time_check(self): 
         """
         Reference: https://stackoverflow.com/questions/53755103/discord-py-time-schedule/53757482
         """
 
         now = datetime.strftime(datetime.now(Alarm.timezone), '%H:%M')
-        messages = ('thang @Scuola Pera nhu cac')
-        messages = str(now)
-
-        return messages
+        response = self.check_alarm(now)
+        return response

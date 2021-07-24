@@ -13,7 +13,10 @@ help_dict = {
         'url': "\t\t\t\tSet ngrok server API",
         'predict': "\t\t\tDetect food from image"
     },
-    '$gettime': '\t\t\tGet system time'
+    '$gettime': '\t\t\tGet system time',
+    '$covid': {
+        'summary': '\t\t\tGet infomation of COVID in global or specific country. Ex: $covid summary'
+    }
 }
 
 class Helper:

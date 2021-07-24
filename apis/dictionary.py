@@ -3,11 +3,10 @@ from unidecode import unidecode
 import json
 import datetime
 import pytz
-# set timezone asia/saigon
 
+# set timezone asia/saigon
 tz = pytz.timezone("Asia/Saigon")
 
-# from replit import db
 
 def clean_text(text):
     """
@@ -66,7 +65,6 @@ class Dictionary:
             if key not in self.db[type].keys():
                 self.db[type][key] = []
             self.db[type][key].append(value)
-            print(value)
             response = "[Info] Updated database"
         except Exception as e:
             response = "[Error] " + str(e)
@@ -76,12 +74,11 @@ class Dictionary:
         """
         List data from database
         """
-        responses_list = []
-        keys = self.db[type].keys()
-        for key in keys:
-            value = self.db[type][key]
-            responses_list.append({key: value})
-        response = str(responses_list)
+        if type == '':
+            response_dict = self.db
+        else:
+            response_dict = self.db[type]
+        response = str(response_dict)
         return response, False
 
     def delete_database(self, type, key, index):
@@ -89,7 +86,12 @@ class Dictionary:
         Delete sentences from database
         """
         try:
-            self.db[type][key].pop(index)
+            if index is None:
+                del self.db[type][key]
+            else:
+                index = int(index)
+                self.db[type][key].pop(index)
+            response = "[Info] Deleted from database"
         except Exception as e:
             response = "[Error] " + str(e)
         return response, False
@@ -115,14 +117,28 @@ class Dictionary:
 
         try:
             # If update command is used 
-            if command.startswith("$updatew"):
-                # Call example: $updatew words | hello KAI | hello there
-                tokens = command.split('$updatew')
+            if command.startswith("$updatedb"):
+                # Call example: $updatedb words | hello KAI | hello there
+                tokens = command.split('$updatedb')
                 k_type, key, value = tokens[-1].split('|')
                 key =  clean_text(key)# No Vietnamese accent
                 value = value.lstrip().rstrip()
                 k_type = k_type.lstrip().rstrip()  
                 response, reply = self.update_database(k_type,key,value)
+            elif command.startswith("$deletedb"):
+                # Call example: $deletedb words | hello KAI | 1
+                tokens = command.split('$deletedb')
+                tokens = tokens[-1].split('|')
+                if len(tokens) == 2:
+                    k_type, key = tokens
+                    index = None
+                if len(tokens) == 3:
+                    k_type, key, index = tokens
+                key =  key.lstrip().rstrip()
+                if index is not None:
+                    index = index.lstrip().rstrip() 
+                k_type = k_type.lstrip().rstrip()  
+                response, reply = self.delete_database(k_type,key,index)
             elif command.startswith("$savedb"):
                 response, reply = self.save_database()
             elif command.startswith("$gettime"):

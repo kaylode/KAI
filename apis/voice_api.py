@@ -1,6 +1,7 @@
 import os
 from .base import API
 from gtts import gTTS
+from googletrans import Translator
 
 import discord
 
@@ -19,18 +20,23 @@ class GoogleVoiceAPI(API):
     Google Text-To-Speech API
     https://github.com/pndurette/gTTS
     """
+    translator = Translator()
     def __init__(self) -> None:
         super().__init__()
         self.trigger = "$speak"
 
     @staticmethod
-    def speak(text, lang="vi"):
+    def speak(text, lang=None):
         """
         Convert text to speech, save to mp3 and convert to Discord player
         """
         if not os.path.exists(CACHE_DIR):
             os.mkdir(CACHE_DIR)
         filename = os.path.join(CACHE_DIR, "temp.mp3")
+
+        if lang is None:
+            # Detect language
+            lang = GoogleVoiceAPI.translator.detect(text).lang
 
         # Saving the converted audio in a mp3 file
         speech = gTTS(text=text, lang=lang, slow=False)
