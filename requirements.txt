@@ -3,3 +3,4 @@ googletrans==3.1.0a0
 unidecode
 gTTS
 pytz
+openai
