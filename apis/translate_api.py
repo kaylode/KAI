@@ -29,10 +29,29 @@ class GoogleTranslationAPI(API):
         # command ex: $translate "Hello"
         try:
             text = find_text(command) # find texts in double quotes
-            result = self.translator.translate(text, dest='vi')
-            response = result.text
+            response = self.translate(text)
+            return response
         except Exception as e:
             response = "[Error] " + str(e)
 
         return response, reply
+
+    def detect_language(self, text):
+        """
+        Detect text's language
+        """
+        result = self.translator.detect(text)
+        lang = result.lang
+        return lang
+
+    def translate(self, text, src=None, dest='vi'):
+        """
+        Translate a text
+        """
+        if src is None:
+            src = self.detect_language(text)
+
+        result = self.translator.translate(text,src=src, dest=dest)
+        response = result.text
+        return response
         
