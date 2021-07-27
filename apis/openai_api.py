@@ -22,31 +22,34 @@ class OpenAIAPI(API):
         super().__init__()
         self.trigger = "$openai"
         self.model = openai.Completion
+        self.current_prompt = {
+            'chat': "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.",
+            'qa': 'I am a highly intelligent question answering bot. If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with "Đéo biết"\n'
+        }
         self.translator = GoogleTranslationAPI()
 
     def get_response(self, prompt, type='chat'):
         """
         Get reponse from OpenAI GPT-3
         """
-        default_prompt = ""
-        if type == 'chat':
-            default_prompt = "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\nHuman: "
+        default_prompt = f"\nHuman: {prompt}\nAI: "
+        merged_prompt = default_prompt.format(prompt=prompt)
+        self.current_prompt[type] += merged_prompt
 
-        if type == 'qa':
-            default_prompt = 'I am a highly intelligent question answering bot. If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with \"Đéo biết\"\nQ:'
-
-        merged_prompt = default_prompt + prompt
-        response = self.model.create(
+        result = self.model.create(
             engine="davinci",
-            prompt=merged_prompt,
-            temperature=0,
-            max_tokens=100,
+            prompt=self.current_prompt[type],
+            temperature=0.9,
+            max_tokens=150,
             top_p=1,
             frequency_penalty=0.0,
-            presence_penalty=0.0,
-            stop=["\n"]
+            presence_penalty=0.6,
+            stop=["\n", " Human:", " AI:"]
         )
 
+        response = result["choices"][0].text.replace(u'\xa0', u' ')
+        self.current_prompt[type] = self.current_prompt[type] + response
+        print(self.current_prompt)
         return response
 
     def do_command(self, command):
@@ -63,12 +66,16 @@ class OpenAIAPI(API):
             lang = self.translator.detect_language(text)
             en_translated = self.translator.translate(text, src=lang, dest='en')
 
-            if text[-1] == '?':
-                typed='qa'
-            else:
-                typed='chat'
+            # if text[-1] == '?':
+            #     typed='qa'
+            # else:
+            typed='chat'
 
-            response = self.get_response(en_translated, type=typed)
+            en_response = self.get_response(en_translated, type=typed)
+
+            response = self.translator.translate(en_response, src='en', dest='vi')
+            print(response)
+
         except Exception as e:
             response = "[Error] " + str(e)
 
