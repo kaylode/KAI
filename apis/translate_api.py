@@ -30,7 +30,7 @@ class GoogleTranslationAPI(API):
         try:
             text = find_text(command) # find texts in double quotes
             response = self.translate(text)
-            return response
+            return response, reply
         except Exception as e:
             response = "[Error] " + str(e)
 

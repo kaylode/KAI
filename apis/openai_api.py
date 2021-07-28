@@ -22,11 +22,21 @@ class OpenAIAPI(API):
         super().__init__()
         self.trigger = "$openai"
         self.model = openai.Completion
+        self.type = "chat"
         self.current_prompt = {
             'chat': "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.",
-            'qa': 'I am a highly intelligent question answering bot. If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with "Đéo biết"\n'
+            'qa': 'I am a highly intelligent question answering bot. If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with "Đéo biết"'
         }
         self.translator = GoogleTranslationAPI()
+
+    def set_message_type(self, type):
+        if type in self.current_prompt.keys():
+            self.type = type
+            response = f"[Info] Set OpenAI type to {type}"
+        else:
+            response = f"[Error] Type not available"
+        reply = False
+        return response, reply
 
     def get_response(self, prompt, type='chat'):
         """
@@ -34,7 +44,8 @@ class OpenAIAPI(API):
         """
         default_prompt = f"\nHuman: {prompt}\nAI: "
         merged_prompt = default_prompt.format(prompt=prompt)
-        self.current_prompt[type] += merged_prompt
+        self.current_prompt[self.type] += merged_prompt
+        print(self.current_prompt)
 
         result = self.model.create(
             engine="davinci",
@@ -48,8 +59,8 @@ class OpenAIAPI(API):
         )
 
         response = result["choices"][0].text.replace(u'\xa0', u' ')
-        self.current_prompt[type] = self.current_prompt[type] + response
-        print(self.current_prompt)
+
+        self.current_prompt[self.type] = self.current_prompt[self.type] + response
         return response
 
     def do_command(self, command):
@@ -59,24 +70,24 @@ class OpenAIAPI(API):
         response = None
         reply = True
 
-        # command ex: $openai "Hello"
-        try:
-            text = find_text(command) # find texts in double quotes
+        # command ex: $openai settype=chat
+        if command.startswith("settype"):
+            typed = command.split('=')[-1].lstrip().rstrip()
+            response, reply = self.set_message_type(typed)
+        else:
+            # command ex: $openai "Hello"
+            try:
+                text = find_text(command) # find texts in double quotes
 
-            lang = self.translator.detect_language(text)
-            en_translated = self.translator.translate(text, src=lang, dest='en')
+                lang = self.translator.detect_language(text)
+                en_translated = self.translator.translate(text, src=lang, dest='en')
 
-            # if text[-1] == '?':
-            #     typed='qa'
-            # else:
-            typed='chat'
+                en_response = self.get_response(en_translated, type=self.type)
 
-            en_response = self.get_response(en_translated, type=typed)
+                response = self.translator.translate(en_response, src='en', dest=lang)
+                print(response)
 
-            response = self.translator.translate(en_response, src='en', dest='vi')
-            print(response)
-
-        except Exception as e:
-            response = "[Error] " + str(e)
+            except Exception as e:
+                response = "[Error] " + str(e)
 
         return response, reply
