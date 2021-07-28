@@ -6,9 +6,12 @@
 ## Proposed features
 - [ ] Wiki search
 - [ ] Meme storage
-- [ ] Covid 19 information
 - [ ] Stream music
 - [ ] Voice control
+- [x] Covid 19 information
+- [x] Basic Computer Vision Model API
+- [x] Customable Alarm
+- [x] OpenAI GPT-3 Chatbot
 - [x] Google Translate
 - [x] Google Text-to-speech 
 
