@@ -16,7 +16,13 @@ help_dict = {
     '$gettime': '\t\t\tGet system time',
     '$covid': {
         'summary': '\t\t\tGet infomation of COVID in global or specific country. Ex: $covid summary'
-    }
+    },
+
+    '$openai': '\t\t\tChat with OpenAI GPT-3. Ex: $openai "mày tên gì ?"',
+
+    '$play': '\t\t\tPlay song from Youtube. Ex: $play music',
+    '$pause': '\t\t\tPause song. Ex: $pause',
+    '$skip': '\t\t\tSkip to next song. Ex: $skip',
 }
 
 class Helper:
