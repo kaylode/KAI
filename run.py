@@ -13,8 +13,10 @@ from bot import KAI
 from configs import get_config
 from apis import GoogleVoiceAPI, Alarm
 
+
 TEST_CHANNEL_ID = 865577241048383492
 ASTROMENZ_CHANNEL_ID = 760897275890368525
+
 
 class MyClient(commands.Bot):
     """
@@ -28,6 +30,11 @@ class MyClient(commands.Bot):
         self.bot = KAI(self.config)
         self.ctx = None
         self.voice_on = False
+
+        # Voice queue
+        self.voice_counter = 0
+        self.voice_client = None
+        self.voice_queue = []
         
         # Alarm
         self.alarm = Alarm()
@@ -35,7 +42,7 @@ class MyClient(commands.Bot):
 
         # create the background task and run it in the background
         self.time_check_async.start()
-
+    
     async def on_ready(self):
         print('We have logged in as {0.user}'.format(client))
 
@@ -46,7 +53,21 @@ class MyClient(commands.Bot):
             response = self.alarm.time_check()
             if channel is not None and response is not None:
                 await channel.send(response)
+    
+    @tasks.loop(seconds=10) # task runs every 60 seconds
+    async def audio_async(self):
+        if self.voice_client is None or self.voice_client.is_playing():
+            self.voice_counter += 1
+            
+        else:
+            if len(self.voice_queue) > 0:
+                response = self.voice_queue.pop(0)
+                async with self.ctx.typing():
+                    self.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
+                await self.ctx.send(f'Now playing: {response.title}')
+                self.voice_counter = 0
 
+    @audio_async.before_loop
     @time_check_async.before_loop
     async def before_my_task(self):
         await self.wait_until_ready() # wait until the bot logs in
@@ -88,10 +109,17 @@ class MyClient(commands.Bot):
                 # Image file
                 await message.channel.send(file=response)
             elif isinstance(response, discord.PCMVolumeTransformer):
+                if not self.audio_async.is_running():
+                    self.audio_async.start()
+                
                 voice = discord.utils.get(client.voice_clients, guild=self.ctx.guild)
                 if voice is None: # If hasn't joined, join voice channel
                     await voice_channel.connect()
-                self.ctx.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
+                self.voice_client = self.ctx.voice_client
+
+                self.voice_queue.append(response)
+                await message.channel.send(f'Queueing: {response.title}')
+              
             else:
                 # Send message
                 if self.voice_on and reply:
@@ -105,8 +133,6 @@ class MyClient(commands.Bot):
                         await message.channel.send(response)
                 else:
                     await message.channel.send(response)
-
-        # self.bot.set_database(message, db)
 
 # Create new processes to keep server online
 keep_alive()
