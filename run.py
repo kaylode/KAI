@@ -57,8 +57,7 @@ class MyClient(commands.Bot):
     @tasks.loop(seconds=10) # task runs every 60 seconds
     async def audio_async(self):
         if self.voice_client is None or self.voice_client.is_playing():
-            self.voice_counter += 1
-            
+            pass            
         else:
             if len(self.voice_queue) > 0:
                 response = self.voice_queue.pop(0)
@@ -66,6 +65,8 @@ class MyClient(commands.Bot):
                     self.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
                 await self.ctx.send(f'Now playing: {response.title}')
                 self.voice_counter = 0
+            else:
+                self.voice_counter += 10
 
     @audio_async.before_loop
     @time_check_async.before_loop
@@ -133,6 +134,21 @@ class MyClient(commands.Bot):
                         await message.channel.send(response)
                 else:
                     await message.channel.send(response)
+
+        if self.voice_counter > 120: 
+            await self.voice_client.disconnect()
+            if self.audio_async.is_running():
+                self.audio_async.stop()
+
+        if message.content.startswith('$pause'):
+            if not self.voice_client.is_paused():
+                self.voice_client.pause()
+        if message.content.startswith('$resume'):
+            if self.voice_client.is_paused():
+                self.voice_client.resume()
+        if message.content.startswith('$skip'):
+            self.voice_client.stop()
+
 
 # Create new processes to keep server online
 keep_alive()
