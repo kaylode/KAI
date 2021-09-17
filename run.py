@@ -12,7 +12,7 @@ from server import keep_alive
 from bot import KAI
 from configs import get_config
 from apis import GoogleVoiceAPI, Alarm
-
+from utils.utils import makeEmbed
 
 TEST_CHANNEL_ID = 865577241048383492
 ASTROMENZ_CHANNEL_ID = 760897275890368525
@@ -63,7 +63,8 @@ class MyClient(commands.Bot):
                 response = self.voice_queue.pop(0)
                 async with self.ctx.typing():
                     self.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
-                await self.ctx.send(f'Now playing: {response.title}')
+                embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:')
+                await self.ctx.send(embed=embed)
                 self.voice_counter = 0
             else:
                 self.voice_counter += 10
@@ -119,7 +120,9 @@ class MyClient(commands.Bot):
                 self.voice_client = self.ctx.voice_client
 
                 self.voice_queue.append(response)
-                await message.channel.send(f'Queueing: {response.title}')
+                embed = makeEmbed(response.title, 'Music :musical_note:', 'Queueing')
+                await message.add_reaction('💗')
+                await message.channel.send(embed=embed)
               
             else:
                 # Send message
@@ -143,11 +146,14 @@ class MyClient(commands.Bot):
         if message.content.startswith('$pause'):
             if not self.voice_client.is_paused():
                 self.voice_client.pause()
+                await message.add_reaction('💗')
         if message.content.startswith('$resume'):
             if self.voice_client.is_paused():
                 self.voice_client.resume()
+                await message.add_reaction('💗')
         if message.content.startswith('$skip'):
             self.voice_client.stop()
+            await message.add_reaction('💗')
 
 
 # Create new processes to keep server online
