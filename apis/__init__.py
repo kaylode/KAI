@@ -7,6 +7,7 @@ from .kaylode_api import KaylodeAPI
 from .covid_api import CovidAPI
 from .openai_api import OpenAIAPI
 from .alarm import Alarm
+from .music import MusicAPI, SongQueue
 
 def get_api(name):
     if name == 'dictionary':
@@ -25,5 +26,7 @@ def get_api(name):
         return CovidAPI()
     if name == 'openai':
         return OpenAIAPI()
+    if name == 'music':
+        return MusicAPI()
     print("[Error] Wrong features name. Check .yaml file")
     raise
