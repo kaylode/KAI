@@ -139,11 +139,13 @@ class MyClient(commands.Bot):
                 else:
                     await message.channel.send(response)
 
-        if self.voice_counter > 180: 
+        if self.voice_counter > 300: 
+            self.voice_counter = 0
+            self.voice_client = None
             await self.voice_client.disconnect()
             if self.audio_async.is_running():
                 self.audio_async.stop()
-            embed = makeEmbed("Disconnected due to inactivity over 3 minutes", field_name='Disconnected')
+            embed = makeEmbed("Disconnected due to inactivity over 5 minutes", field_name='Disconnected')
             self.prev_message = await message.channel.send(embed=embed)
 
         if message.content.startswith('$pause'):
