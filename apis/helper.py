@@ -22,6 +22,7 @@ help_dict = {
 
     '$play': '\t\t\tPlay song from Youtube. Ex: $play music',
     '$pause': '\t\t\tPause song. Ex: $pause',
+    '$resume': '\t\t\Resume song. Ex: $resume',
     '$skip': '\t\t\tSkip to next song. Ex: $skip',
 }
 
