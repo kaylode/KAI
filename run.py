@@ -35,6 +35,7 @@ class MyClient(commands.Bot):
         self.voice_counter = 0
         self.voice_client = None
         self.voice_queue = []
+        self.prev_message = None
         
         # Alarm
         self.alarm = Alarm()
@@ -64,7 +65,7 @@ class MyClient(commands.Bot):
                 async with self.ctx.typing():
                     self.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
                 embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:')
-                await self.ctx.send(embed=embed)
+                self.prev_message = await self.ctx.send(embed=embed)
                 self.voice_counter = 0
             else:
                 self.voice_counter += 10
@@ -122,7 +123,7 @@ class MyClient(commands.Bot):
                 self.voice_queue.append(response)
                 embed = makeEmbed(response.title, 'Music :musical_note:', 'Queueing')
                 await message.add_reaction('💗')
-                await message.channel.send(embed=embed)
+                self.prev_message = await message.channel.send(embed=embed)
               
             else:
                 # Send message
@@ -138,10 +139,12 @@ class MyClient(commands.Bot):
                 else:
                     await message.channel.send(response)
 
-        if self.voice_counter > 120: 
+        if self.voice_counter > 180: 
             await self.voice_client.disconnect()
             if self.audio_async.is_running():
                 self.audio_async.stop()
+            embed = makeEmbed("Disconnected due to inactivity over 3 minutes", field_name='Disconnected')
+            self.prev_message = await message.channel.send(embed=embed)
 
         if message.content.startswith('$pause'):
             if not self.voice_client.is_paused():
