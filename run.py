@@ -148,8 +148,8 @@ class MyClient(commands.Bot):
 
         if self.voice_counter > 300: 
             self.voice_counter = 0
-            self.voice_client = None
             await self.voice_client.disconnect()
+            self.voice_client = None
             if self.audio_async.is_running():
                 self.audio_async.stop()
             embed = makeEmbed("Disconnected due to inactivity over 5 minutes", field_name='Disconnected')
