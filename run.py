@@ -64,8 +64,13 @@ class MyClient(commands.Bot):
                 response = self.voice_queue.pop(0)
                 async with self.ctx.typing():
                     self.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
-                embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:')
-                self.prev_message = await self.ctx.send(embed=embed)
+
+                try:
+                    embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:')
+                    self.prev_message = await self.ctx.send(embed=embed)
+                except:
+                    pass
+                
                 self.voice_counter = 0
             else:
                 self.voice_counter += 10
@@ -121,9 +126,12 @@ class MyClient(commands.Bot):
                 self.voice_client = self.ctx.voice_client
 
                 self.voice_queue.append(response)
-                embed = makeEmbed(response.title, 'Music :musical_note:', 'Queueing')
+                try:
+                    embed = makeEmbed(response.title, 'Music :musical_note:', 'Queueing')
+                    self.prev_message = await message.channel.send(embed=embed)
+                except:
+                    pass
                 await message.add_reaction('💗')
-                self.prev_message = await message.channel.send(embed=embed)
               
             else:
                 # Send message
@@ -132,12 +140,11 @@ class MyClient(commands.Bot):
                         voice = discord.utils.get(client.voice_clients, guild=self.ctx.guild)
                         if voice is None: # If hasn't joined, join voice channel
                             await voice_channel.connect()
-                        response = GoogleVoiceAPI.speak(text=response, lang='vi')
-                        self.ctx.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
-                    else:
-                        await message.channel.send(response)
-                else:
-                    await message.channel.send(response)
+                            
+                        response_voice = GoogleVoiceAPI.speak(text=response, lang='vi')
+                        self.ctx.voice_client.play(response_voice, after=lambda e: print('Player error: %s' % e) if e else None)
+                    
+                await message.channel.send(response)
 
         if self.voice_counter > 300: 
             self.voice_counter = 0
