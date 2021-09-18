@@ -1,4 +1,4 @@
 settings:
   name: "KAI"
-  apis: ['openai','covidapi', 'kaylodeapi', 'foodapi', 'translateapi', 'helper', 'voiceapi', 'dictionary', 'music']
+  apis: ['openai','covidapi', 'kaylodeapi', 'foodapi', 'translateapi', 'helper', 'voiceapi', 'dictionary', 'music', 'wikipedia']
     

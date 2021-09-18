@@ -8,6 +8,7 @@ from .covid_api import CovidAPI
 from .openai_api import OpenAIAPI
 from .alarm import Alarm
 from .music import MusicAPI, SongQueue
+from .wikipedia_api import WikipediaAPI
 
 def get_api(name):
     if name == 'dictionary':
@@ -28,5 +29,8 @@ def get_api(name):
         return OpenAIAPI()
     if name == 'music':
         return MusicAPI()
+    if name == 'wikipedia':
+        return WikipediaAPI()
+        
     print("[Error] Wrong features name. Check .yaml file")
     raise
