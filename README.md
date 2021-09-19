@@ -4,7 +4,7 @@
 - UptimeRobot: https://uptimerobot.com/
 
 ## Proposed features
-- [ ] Wiki search
+- [x] Wiki search
 - [ ] Meme storage
 - [x] Stream music
 - [ ] Voice control
