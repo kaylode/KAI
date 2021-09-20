@@ -9,6 +9,7 @@ from .openai_api import OpenAIAPI
 from .alarm import Alarm
 from .music import MusicAPI, SongQueue
 from .wikipedia_api import WikipediaAPI
+from .speech import SpeechToTextAPI
 
 def get_api(name):
     if name == 'dictionary':

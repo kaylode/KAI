@@ -11,8 +11,8 @@ from discord.ext import commands, tasks
 from server import keep_alive
 from bot import KAI
 from configs import get_config
-from apis import GoogleVoiceAPI, Alarm
-from utils.utils import makeEmbed
+from apis import GoogleVoiceAPI, Alarm, SpeechToTextAPI
+from utils.utils import makeEmbed, convertPCM2WAV
 
 TEST_CHANNEL_ID = 865577241048383492
 ASTROMENZ_CHANNEL_ID = 760897275890368525
@@ -54,6 +54,13 @@ class MyClient(commands.Bot):
             response = self.alarm.time_check()
             if channel is not None and response is not None:
                 await channel.send(response)
+
+    @tasks.loop(seconds=5) # task runs every x seconds
+    async def speech_check_async(self):
+        if os.path.exists('./.cache/recording.wav'):
+            text = SpeechToTextAPI.speak()
+            channel = self.get_channel(TEST_CHANNEL_ID)
+            await channel.send(text)
     
     @tasks.loop(seconds=10) # task runs every 60 seconds
     async def audio_async(self):
@@ -75,6 +82,7 @@ class MyClient(commands.Bot):
             else:
                 self.voice_counter += 10
 
+    @speech_check_async.before_loop
     @audio_async.before_loop
     @time_check_async.before_loop
     async def before_my_task(self):
@@ -98,6 +106,11 @@ class MyClient(commands.Bot):
 
         # Process message and get response 
         response, reply = self.bot.response(message)
+
+
+        if message.content.startswith('$join'):
+            if not self.speech_check_async.is_running():
+                self.speech_check_async.start()
 
         # Voice on/off
         if message.content.startswith('$voice'):
