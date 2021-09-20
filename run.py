@@ -57,10 +57,19 @@ class MyClient(commands.Bot):
 
     @tasks.loop(seconds=5) # task runs every x seconds
     async def speech_check_async(self):
-        if os.path.exists('./.cache/recording.wav'):
-            text = SpeechToTextAPI.speak()
-            channel = self.get_channel(TEST_CHANNEL_ID)
-            await channel.send(text)
+        if os.path.exists('./.cache/recording.pcm'):
+            if os.path.exists('./.cache/recording.wav'):
+                text = SpeechToTextAPI.speak()
+                print(text)
+                if text is not None:
+                    channel = self.get_channel(TEST_CHANNEL_ID)
+                    await channel.send(text)
+                    # response_voice = GoogleVoiceAPI.speak(text=text, lang='vi')
+                    # self.voice_client.play(response_voice, after=lambda e: print('Player error: %s' % e) if e else None)
+                os.remove('./.cache/recording.pcm')
+                os.remove('./.cache/recording.wav')
+            else:
+                convertPCM2WAV()
     
     @tasks.loop(seconds=10) # task runs every 60 seconds
     async def audio_async(self):
@@ -108,9 +117,12 @@ class MyClient(commands.Bot):
         response, reply = self.bot.response(message)
 
 
-        if message.content.startswith('$join'):
+        if message.content.startswith('$listen'):
             if not self.speech_check_async.is_running():
+                await voice_channel.connect()
+                self.voice_client = self.ctx.voice_client
                 self.speech_check_async.start()
+            
 
         # Voice on/off
         if message.content.startswith('$voice'):
@@ -165,6 +177,10 @@ class MyClient(commands.Bot):
             self.voice_client = None
             if self.audio_async.is_running():
                 self.audio_async.stop()
+
+            if self.speech_check_async.is_running():
+                self.speech_check_async.stop()
+
             embed = makeEmbed("Disconnected due to inactivity over 5 minutes", field_name='Disconnected')
             self.prev_message = await message.channel.send(embed=embed)
 

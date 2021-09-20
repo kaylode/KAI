@@ -12,10 +12,12 @@ class SpeechToTextAPI:
     @staticmethod
     def speak(inpath=f'{CACHE_DIR}/recording.wav', lang="vi-VI"):
         
-        # use the audio file as the audio source                                        
-        with sr.AudioFile(inpath) as source:
-            audio = SpeechToTextAPI.sr.record(source)               
-            response = SpeechToTextAPI.sr.recognize_google(audio, language=lang)
-
-        return response, True
+        # use the audio file as the audio source     
+        try:              
+            with sr.AudioFile(inpath) as source:
+                audio = SpeechToTextAPI.sr.record(source) 
+                response = SpeechToTextAPI.sr.recognize_google(audio, language=lang)
+        except:
+            response = None
+        return response
 
