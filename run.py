@@ -83,6 +83,8 @@ class MyClient(commands.Bot):
 
                 try:
                     embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:')
+                    if self.prev_message is not None:
+                        await self.prev_message.delete()
                     self.prev_message = await self.ctx.send(embed=embed)
                 except:
                     pass
@@ -144,6 +146,8 @@ class MyClient(commands.Bot):
                 self.voice_queue.append(response)
                 try:
                     embed = makeEmbed(response.title, 'Music :musical_note:', 'Queueing')
+                    if self.prev_message is not None:
+                        await self.prev_message.delete()
                     self.prev_message = await message.channel.send(embed=embed)
                 except:
                     pass
@@ -173,6 +177,8 @@ class MyClient(commands.Bot):
                 self.speech_check_async.stop()
 
             embed = makeEmbed("Disconnected due to inactivity over 5 minutes", field_name='Disconnected')
+            if self.prev_message is not None:
+                await self.prev_message.delete()
             self.prev_message = await message.channel.send(embed=embed)
 
         if message.content.startswith('$pause'):

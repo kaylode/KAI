@@ -12,9 +12,15 @@ client.once('ready', () => {
 var channel = null;
 
 client.on('message', message => {
-    if (message.author.id != client.user.id && message.content=='$listen') {
-        message.member.voice.channel.join();
-        channel = message.channel;
+    if (message.author.id != client.user.id) {
+        if (message.content=='$listen on') {
+            message.member.voice.channel.join();
+            channel = message.channel;
+        }
+
+        if (message.content=='$listen off') {
+            message.member.voice.channel.leave();
+        }
     }
 })
 
@@ -26,10 +32,13 @@ client.on('speech', message => {
         tokens = response.split(" ");
         let trigger = tokens[0];
         switch(trigger) {
-          case "play":
-          case "skip":
-          case "pause":
-          case "resume":
+            case "play":
+            case "skip":
+            case "pause":
+            case "resume":
+            case "wiki":
+            case "voice":
+            case "listen":
               response = "$".concat(response);
               channel.send(response);
               console.log(response);     
