@@ -98,6 +98,8 @@ class MyClient(commands.Bot):
         await self.wait_until_ready() # wait until the bot logs in
 
     async def on_message(self, message):
+        if message.author == client.user:
+            return
 
         self.ctx = await client.get_context(message)
 
@@ -110,23 +112,8 @@ class MyClient(commands.Bot):
         else:
             voice_channel = None
 
-
-        if message.author == client.user:
-            if message.content.startswith('$play'):
-                pass
-            else:     
-                return
-
-
         # Process message and get response 
         response, reply = self.bot.response(message)
-
-
-        # if message.content.startswith('$listen'):
-        #     self.voice_client =  await voice_channel.connect()
-            # if not self.speech_check_async.is_running():
-            #     self.speech_check_async.start()
-            
 
         # Voice on/off
         if message.content.startswith('$voice'):
