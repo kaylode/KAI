@@ -1,4 +1,4 @@
-const token = process.env.TOKEN;
+const token = process.env.TOKENJS;
 
 const fs = require('fs');
 const Discord = require('discord.js');
@@ -11,6 +11,8 @@ client.once('ready', () => {
 client.on('message', async message => {
     if (message.author.id != client.user.id && message.content=='$listen') {
         const connection = await message.member.voice.channel.join();
+
+        // DiscordJS listens twice, the second time is empty audio so use trick
         var i = 0;
         connection.on('speaking', (user, speaking) => {
             if (speaking && ((i % 2)==0) && user.username=='Kaylode') {

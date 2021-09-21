@@ -11,7 +11,7 @@ from discord.ext import commands, tasks
 from server import keep_alive
 from bot import KAI
 from configs import get_config
-from apis import GoogleVoiceAPI, Alarm, SpeechToTextAPI
+from apis import GoogleVoiceAPI, Alarm, SpeechToTextAPI, MusicAPI
 from utils.utils import makeEmbed, convertPCM2WAV
 
 TEST_CHANNEL_ID = 865577241048383492
@@ -55,21 +55,21 @@ class MyClient(commands.Bot):
             if channel is not None and response is not None:
                 await channel.send(response)
 
-    @tasks.loop(seconds=5) # task runs every x seconds
-    async def speech_check_async(self):
-        if os.path.exists('./.cache/recording.pcm'):
-            if os.path.exists('./.cache/recording.wav'):
-                text = SpeechToTextAPI.speak()
-                print(text)
-                if text is not None:
-                    channel = self.get_channel(TEST_CHANNEL_ID)
-                    await channel.send(text)
-                    # response_voice = GoogleVoiceAPI.speak(text=text, lang='vi')
-                    # self.voice_client.play(response_voice, after=lambda e: print('Player error: %s' % e) if e else None)
-                os.remove('./.cache/recording.pcm')
-                os.remove('./.cache/recording.wav')
-            else:
-                convertPCM2WAV()
+    # @tasks.loop(seconds=5) # task runs every x seconds
+    # async def speech_check_async(self):
+    #     if os.path.exists('./.cache/recording.pcm'):
+    #         if os.path.exists('./.cache/recording.wav'):
+    #             text = SpeechToTextAPI.speak(lang='en-US')
+    #             print(text)
+    #             if text is not None:
+    #                 channel = self.get_channel(TEST_CHANNEL_ID)
+    #                 await channel.send(text)
+    #                 # response_voice = GoogleVoiceAPI.speak(text=text, lang='vi')
+    #                 # self.voice_client.play(response_voice, after=lambda e: print('Player error: %s' % e) if e else None)
+    #             os.remove('./.cache/recording.pcm')
+    #             os.remove('./.cache/recording.wav')
+    #         else:
+    #             convertPCM2WAV()
     
     @tasks.loop(seconds=10) # task runs every 60 seconds
     async def audio_async(self):
@@ -91,7 +91,7 @@ class MyClient(commands.Bot):
             else:
                 self.voice_counter += 10
 
-    @speech_check_async.before_loop
+    # @speech_check_async.before_loop
     @audio_async.before_loop
     @time_check_async.before_loop
     async def before_my_task(self):
@@ -99,13 +99,10 @@ class MyClient(commands.Bot):
 
     async def on_message(self, message):
 
-        if message.author == client.user:
-            return
-
         self.ctx = await client.get_context(message)
 
         # Whether author connect to voice channel
-        voice_state = self.ctx.author.voice 
+        voice_state = self.ctx.message.author.voice 
 
         # Get the channel of author
         if voice_state is not None:
@@ -113,15 +110,22 @@ class MyClient(commands.Bot):
         else:
             voice_channel = None
 
+
+        if message.author == client.user:
+            if message.content.startswith('$play'):
+                pass
+            else:     
+                return
+
+
         # Process message and get response 
         response, reply = self.bot.response(message)
 
 
         if message.content.startswith('$listen'):
-            if not self.speech_check_async.is_running():
-                await voice_channel.connect()
-                self.voice_client = self.ctx.voice_client
-                self.speech_check_async.start()
+            self.voice_client =  await voice_channel.connect()
+            # if not self.speech_check_async.is_running():
+            #     self.speech_check_async.start()
             
 
         # Voice on/off

@@ -1,4 +1,5 @@
 import asyncio
+from os import stat
 import discord
 import youtube_dl
 import itertools
@@ -87,8 +88,9 @@ class MusicAPI():
 
         return response, False
 
-    def play_from_url(self, url):
-        """
+    @staticmethod
+    def play_from_url(url):
+        """s
         Plays from a url (almost anything youtube_dl supports)
         """
         try:

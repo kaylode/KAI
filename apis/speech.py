@@ -3,6 +3,15 @@ import speech_recognition as sr
 
 CACHE_DIR ='./.cache'
 
+def process_response(text):
+    text = text.lower()
+    tokens = text.split()
+    if tokens[0] == 'play':
+        return '$play ' + ' '.join(tokens[1:])
+    else:
+        return None
+
+
 class SpeechToTextAPI:
     # translator = Translator()
     sr = sr.Recognizer()
@@ -19,5 +28,8 @@ class SpeechToTextAPI:
                 response = SpeechToTextAPI.sr.recognize_google(audio, language=lang)
         except:
             response = None
+
+        if response is not None:
+            response = process_response(response)
         return response
 
