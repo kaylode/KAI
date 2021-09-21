@@ -4,6 +4,9 @@ from .base import API
 wikipedia.set_lang("vi")
 
 class WikipediaAPI(API):
+    """
+    Search query from wikipedia
+    """
     def __init__(self) -> None:
         super().__init__()
         self.trigger = "$wiki"

@@ -1,9 +1,6 @@
 import asyncio
-from os import stat
 import discord
 import youtube_dl
-import itertools
-import random
 
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
@@ -30,6 +27,9 @@ ffmpeg_options = {
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
 class YTDLSource(discord.PCMVolumeTransformer):
+    """
+    Load music source from Youtube query
+    """
     def __init__(self, source, *, data, volume=0.5):
         super().__init__(source, volume)
 
@@ -50,29 +50,10 @@ class YTDLSource(discord.PCMVolumeTransformer):
         filename = data['url'] if stream else ytdl.prepare_filename(data)
         return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
 
-class SongQueue(asyncio.Queue):
-    def __getitem__(self, item):
-        if isinstance(item, slice):
-            return list(itertools.islice(self._queue, item.start, item.stop, item.step))
-        else:
-            return self._queue[item]
-
-    def __iter__(self):
-        return self._queue.__iter__()
-
-    def __len__(self):
-        return self.qsize()
-
-    def clear(self):
-        self._queue.clear()
-
-    def shuffle(self):
-        random.shuffle(self._queue)
-
-    def remove(self, index: int):
-        del self._queue[index]
-
 class MusicAPI():
+    """
+    Play music from youtube
+    """
     def __init__(self) -> None:
         self.trigger = "$play"
 
@@ -90,12 +71,12 @@ class MusicAPI():
 
     @staticmethod
     def play_from_url(url):
-        """s
+        """
         Plays from a url (almost anything youtube_dl supports)
         """
         try:
             response = YTDLSource.from_url(url, loop=None, stream=True)
         except:
-            response = "Song not found"
+            response = "Không tìm thấy bài hát"
         
         return response

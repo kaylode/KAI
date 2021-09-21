@@ -7,7 +7,7 @@ from .kaylode_api import KaylodeAPI
 from .covid_api import CovidAPI
 from .openai_api import OpenAIAPI
 from .alarm import Alarm
-from .music import MusicAPI, SongQueue
+from .music import MusicAPI
 from .wikipedia_api import WikipediaAPI
 from .speech import SpeechToTextAPI
 

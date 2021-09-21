@@ -13,6 +13,9 @@ def process_response(text):
 
 
 class SpeechToTextAPI:
+    """
+    Speech to text, load from wav file
+    """
     # translator = Translator()
     sr = sr.Recognizer()
     def __init__(self) -> None:
