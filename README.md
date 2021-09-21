@@ -7,7 +7,7 @@
 - [x] Wiki search
 - [ ] Meme storage
 - [x] Stream music
-- [ ] Voice control
+- [x] Voice control
 - [x] Covid 19 information
 - [x] Basic Computer Vision Model API
 - [x] Customable Alarm
