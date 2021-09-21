@@ -1,9 +1,12 @@
 const token = process.env.TOKENJS;
 const { Client, Message } = require('discord.js');
-const { DiscordSR } = require('discord-speech-recognition');
+const { DiscordSR,  DiscordSROptions, resolveSpeechWithGoogleSpeechV2 } = require('discord-speech-recognition');
 
 const client = new Client();
-const discordSR = new DiscordSR(client);
+const discordSR = new DiscordSR(client, {
+  lang: "vi-VN",
+  speechRecognition: resolveSpeechWithGoogleSpeechV2,
+});
 
 client.once('ready', () => {
     console.log('Ready!');
@@ -17,10 +20,10 @@ client.on('message', message => {
             message.member.voice.channel.join();
             channel = message.channel;
         }
+    }
 
-        if (message.content=='$listen off') {
-            message.member.voice.channel.leave();
-        }
+    if (message.content=='$listen off') {
+        message.member.voice.channel.leave();
     }
 })
 
@@ -29,6 +32,7 @@ client.on('speech', message => {
     let response = message.content;
     var tokens;
     try{
+        response = response.toLowerCase();
         tokens = response.split(" ");
         let trigger = tokens[0];
         switch(trigger) {
