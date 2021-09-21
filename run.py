@@ -176,9 +176,6 @@ class MyClient(commands.Bot):
             if self.audio_async.is_running():
                 self.audio_async.stop()
 
-            if self.speech_check_async.is_running():
-                self.speech_check_async.stop()
-
             embed = makeEmbed("Disconnected due to inactivity over 5 minutes", field_name='Disconnected')
             if self.prev_message is not None:
                 await self.prev_message.delete()
