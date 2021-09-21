@@ -36,6 +36,7 @@ class MyClient(commands.Bot):
         self.voice_client = None
         self.voice_queue = []
         self.prev_message = None
+        self.current_song_name = None 
         
         # Alarm
         self.alarm = Alarm()
@@ -54,6 +55,7 @@ class MyClient(commands.Bot):
             response = self.alarm.time_check()
             if channel is not None and response is not None:
                 await channel.send(response)
+                print(chr(27) + "[2J")
 
     # @tasks.loop(seconds=5) # task runs every x seconds
     # async def speech_check_async(self):
@@ -82,6 +84,7 @@ class MyClient(commands.Bot):
                     self.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
 
                 try:
+                    self.current_song_name = response.title
                     embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:')
                     if self.prev_message is not None:
                         await self.prev_message.delete()
@@ -181,17 +184,66 @@ class MyClient(commands.Bot):
                 await self.prev_message.delete()
             self.prev_message = await message.channel.send(embed=embed)
 
-        if message.content.startswith('$pause'):
+        if message.content.startswith('$pause') or message.content.startswith('$stop'):
             if not self.voice_client.is_paused():
                 self.voice_client.pause()
                 await message.add_reaction('💗')
-        if message.content.startswith('$resume') or message.content.startswith('$continue') :
+        if message.content.startswith('$resume') or message.content.startswith('$continue'):
             if self.voice_client.is_paused():
                 self.voice_client.resume()
                 await message.add_reaction('💗')
-        if message.content.startswith('$skip') or message.content.startswith('$next') :
+        if message.content.startswith('$next'):
             self.voice_client.stop()
             await message.add_reaction('💗')
+        if message.content.startswith('$skip'):
+            num_songs = message.content.split('$skip')[-1].lstrip().rstrip()
+            if num_songs.isspace():
+                num_songs = 1
+            try:
+                num_songs = int(num_songs)
+                for i in range(num_songs-1):
+                    self.voice_queue.pop(0)
+                self.voice_client.stop()
+                await message.add_reaction('💗')
+            except:
+                pass
+        if message.content.startswith('$clear'):
+            while len(self.voice_queue) > 0:
+                self.voice_queue.pop(0)
+            self.voice_client.stop()
+            await message.add_reaction('💗')
+
+        
+        if message.content.startswith('$remove'):
+            ith_song = message.content.split('$remove')[-1].lstrip().rstrip()
+            try:
+                ith_song = int(ith_song)
+                self.voice_queue.pop(ith_song-1)
+                await message.add_reaction('💗')
+            except:
+                pass
+
+        if message.content.startswith('$queue'):
+            await message.add_reaction('💗')
+            result_string = []
+            if self.current_song_name is not None:
+                result_string.append(f"0. {self.current_song_name}")
+            for i, song in enumerate(self.voice_queue):
+                result_string.append(f"{i+1}. {song.title}")
+                if i == 5:
+                    break
+            if len(result_string) == 0:
+                result_string = "Queue is empty"
+            else:
+                result_string = '\n'.join(result_string)
+            
+            embed = makeEmbed(result_string, 'Music :musical_note:', field_name='Queue')
+            if self.prev_message is not None:
+                await self.prev_message.delete()
+                self.prev_message = None
+            await message.channel.send(embed=embed)
+
+        
 
 
 # Create new processes to keep server online

@@ -3,12 +3,15 @@ const token = process.env.TOKENJS;
 const { Client, Message } = require('discord.js');
 const { DiscordSR,  DiscordSROptions, resolveSpeechWithGoogleSpeechV2, VoiceMessage } = require('discord-speech-recognition');
 
-const client = new Client();
+var client = new Client();
 var discordSR = new DiscordSR(client, {
   lang: "vi-VN",
   speechRecognition: resolveSpeechWithGoogleSpeechV2,
 });
 
+// Console log counter
+var console_logs = [];
+var previos_message = null;
 // Load mapping from database
 const db = require('./database/db.json');
 var dict = db['voice'];
@@ -43,25 +46,33 @@ client.on('message', message => {
         if (message.content=='$listen on') {
             message.member.voice.channel.join();
             channel = message.channel;
+            previos_message = message;
             channel.send("Vui lòng nói lớn, tao mới nghe được.");
         }
     }
 
     if (message.content=='$listen off') {
         message.member.voice.channel.leave();
+        // if (previos_message != null) {
+        //     previos_message.delete()
+        // }
+        previos_message = message;
         channel.send("Tạm biệt.");
     }
 
     if (message.content=='$listen vietnam' || message.content=='$listen việt nam') {
         console.log('Chuyển sang Tiếng Việt');
-        discordSR = new DiscordSR(client, {
+        discordSR.speechOptions = {
             lang: "vi-VN",
             speechRecognition: resolveSpeechWithGoogleSpeechV2,
-        });
+        };
     }
 
     if (message.content=='$listen english') {
-        discordSR = new DiscordSR(client);
+        discordSR.speechOptions = {
+            lang: "en-US",
+            speechRecognition: resolveSpeechWithGoogleSpeechV2,
+        };
         console.log('Change to English');
     }
 })
@@ -72,6 +83,12 @@ client.on('speech', message => {
     let isbot = message.author.isbot;
     let duration = message.duration;
     let response = message.content;
+
+    console_logs.push(response)
+    if (console_logs.length >= 50){
+        console.clear();
+        console_logs = [];
+    }
 
     if ((parseFloat(duration) > 10) || (typeof(response) == "undefined") || isbot) {
         console.log(user.concat(': ', String(response), ' (', duration, ')')); 
@@ -89,14 +106,21 @@ client.on('speech', message => {
             case "pause":
             case "stop":
             case "resume":
+            case "remove":
             case "wiki":
             case "voice":
             case "listen":
+            case "clear":
+            case "queue":
               response = "$".concat(response);
+              // if (previos_message != null) {
+              //     previos_message.delete();
+              // }
+              // previos_message = message;
               channel.send(response);
               break;
           default:
-              break
+              break;
         }
         console.log(user.concat(': ', response, ' (', duration, ')'));             
     }
