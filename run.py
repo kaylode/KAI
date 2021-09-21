@@ -122,8 +122,8 @@ class MyClient(commands.Bot):
         response, reply = self.bot.response(message)
 
 
-        if message.content.startswith('$listen'):
-            self.voice_client =  await voice_channel.connect()
+        # if message.content.startswith('$listen'):
+        #     self.voice_client =  await voice_channel.connect()
             # if not self.speech_check_async.is_running():
             #     self.speech_check_async.start()
             
