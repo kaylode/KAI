@@ -5,7 +5,6 @@
 
 ## Proposed features
 - [x] Wiki search
-- [ ] Meme storage
 - [x] Stream music
 - [x] Voice control
 - [x] Covid 19 information
@@ -19,3 +18,4 @@
 - https://www.freecodecamp.org/news/create-a-discord-bot-with-python/
 - Discord Docs: https://github.com/Rapptz/discord.py/tree/v1.7.3/examples
 - Discord Markdown: https://gist.github.com/matthewzring/9f7bbfd102003963f9be7dbcf7d40e51
+- https://github.com/Rei-x/discord-speech-recognition
