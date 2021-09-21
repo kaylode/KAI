@@ -15,17 +15,19 @@ var dict = db['voice'];
 
 function mapTriggerWords(text){
     // Map trigger voice words into trigger commands
-    // Hardcoded trigger words must be 1 or 2 tokens
+    
     let result = text;
     let tokens = text.split(" ");
-    let triggers = [tokens[0], tokens.slice(0,2).join(' ')];
-    for (const tr of triggers) {
-        if (tr in dict) {
-            console.log(tr);
-            result = dict[tr][0];
-            result = result.concat(' ', tokens.slice(2).join(' '));
+
+    let length = tokens.length;
+    for (let i = 0; i < length; i++) {
+        let trigger_tokens = tokens.slice(0,i+1)
+        let trigger = trigger_tokens.join(' ');
+        if (trigger in dict) {
+            result = dict[trigger][0];
+            result = result.concat(' ', tokens.slice(trigger_tokens.length).join(' '));
             return result;
-        }
+        } 
     }
     return result;
 }
