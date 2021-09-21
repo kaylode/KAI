@@ -32,6 +32,7 @@ client.on('speech', message => {
           case "resume":
               response = "$".concat(response);
               channel.send(response);
+              console.log(response);     
               break;
           default:
               console.log(response);     
