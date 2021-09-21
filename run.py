@@ -185,11 +185,11 @@ class MyClient(commands.Bot):
             if not self.voice_client.is_paused():
                 self.voice_client.pause()
                 await message.add_reaction('💗')
-        if message.content.startswith('$resume'):
+        if message.content.startswith('$resume') or message.content.startswith('$continue') :
             if self.voice_client.is_paused():
                 self.voice_client.resume()
                 await message.add_reaction('💗')
-        if message.content.startswith('$skip'):
+        if message.content.startswith('$skip') or message.content.startswith('$next') :
             self.voice_client.stop()
             await message.add_reaction('💗')
 

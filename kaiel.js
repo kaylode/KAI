@@ -38,6 +38,8 @@ client.on('speech', message => {
         switch(trigger) {
             case "play":
             case "skip":
+            case "continue":
+            case "next":
             case "pause":
             case "resume":
             case "wiki":
