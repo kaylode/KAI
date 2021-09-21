@@ -1,9 +1,10 @@
+const keep_alive = require('./server.js')
 const token = process.env.TOKENJS;
 const { Client, Message } = require('discord.js');
-const { DiscordSR,  DiscordSROptions, resolveSpeechWithGoogleSpeechV2 } = require('discord-speech-recognition');
+const { DiscordSR,  DiscordSROptions, resolveSpeechWithGoogleSpeechV2, VoiceMessage } = require('discord-speech-recognition');
 
 const client = new Client();
-const discordSR = new DiscordSR(client, {
+var discordSR = new DiscordSR(client, {
   lang: "vi-VN",
   speechRecognition: resolveSpeechWithGoogleSpeechV2,
 });
@@ -14,6 +15,7 @@ var dict = db['voice'];
 
 function mapTriggerWords(text){
     // Map trigger voice words into trigger commands
+    // Hardcoded trigger words must be 1 or 2 tokens
     let result = text;
     let tokens = text.split(" ");
     let triggers = [tokens[0], tokens.slice(0,2).join(' ')];
@@ -48,26 +50,31 @@ client.on('message', message => {
         channel.send("Tạm biệt.");
     }
 
-    if (message.content=='$listen vn') {
+    if (message.content=='$listen vietnam' || message.content=='$listen việt nam') {
+        console.log('Chuyển sang Tiếng Việt');
         discordSR = new DiscordSR(client, {
             lang: "vi-VN",
             speechRecognition: resolveSpeechWithGoogleSpeechV2,
         });
     }
 
-    if (message.content=='$listen en') {
-        discordSR = new DiscordSR(client, {
-            lang: "en-US",
-            speechRecognition: resolveSpeechWithGoogleSpeechV2,
-        });
+    if (message.content=='$listen english') {
+        discordSR = new DiscordSR(client);
+        console.log('Change to English');
     }
 })
 
 client.on('speech', message => {
     // If speech detected, do
+    let user = message.author.username;
+    let isbot = message.author.isbot;
+    let duration = message.duration;
     let response = message.content;
-    var tokens;
-    try{
+
+    if ((parseFloat(duration) > 10) || (typeof(response) == "undefined") || isbot) {
+        console.log(user.concat(': ', String(response), ' (', duration, ')')); 
+    } else {
+        var tokens;
         response = response.toLowerCase();
         response = mapTriggerWords(response);
         tokens = response.split(" ");
@@ -85,14 +92,11 @@ client.on('speech', message => {
             case "listen":
               response = "$".concat(response);
               channel.send(response);
-              console.log(response);     
               break;
           default:
-              console.log(response);     
+              break
         }
-    }
-    catch (err) {
-        console.log('Undefined')
+        console.log(user.concat(': ', response, ' (', duration, ')'));             
     }
 })
 
