@@ -8,10 +8,12 @@ const discordSR = new DiscordSR(client, {
   speechRecognition: resolveSpeechWithGoogleSpeechV2,
 });
 
+// Load mapping from database
 const db = require('./database/db.json');
 var dict = db['voice'];
 
 function mapTriggerWords(text){
+    // Map trigger voice words into trigger commands
     let result = text;
     let tokens = text.split(" ");
     let triggers = [tokens[0], tokens.slice(0,2).join(' ')];
@@ -45,10 +47,24 @@ client.on('message', message => {
         message.member.voice.channel.leave();
         channel.send("Tạm biệt.");
     }
+
+    if (message.content=='$listen vn') {
+        discordSR = new DiscordSR(client, {
+            lang: "vi-VN",
+            speechRecognition: resolveSpeechWithGoogleSpeechV2,
+        });
+    }
+
+    if (message.content=='$listen en') {
+        discordSR = new DiscordSR(client, {
+            lang: "en-US",
+            speechRecognition: resolveSpeechWithGoogleSpeechV2,
+        });
+    }
 })
 
 client.on('speech', message => {
-
+    // If speech detected, do
     let response = message.content;
     var tokens;
     try{
