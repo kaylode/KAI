@@ -22,6 +22,11 @@
         ],
         "m ngu vlz kai": [
             "tao xin loi"
+        ],
+        "***": [
+            "Không nói tục chửi thề nhá {name} 😡", 
+            "Chửi thề là đéo văn minh {name} 😡", 
+            "{name} không được chửi thề  😤"
         ]
     },
     "alarm": {
@@ -76,6 +81,8 @@
         ],
         "wingardium leviosa": [
             "queue"
-        ]
+        ],
+        "xóa danh sách": ["clear"], 
+        "xóa tất cả bài hát": ["clear"]
     }
 }

@@ -54,9 +54,6 @@ client.on('message', message => {
 
     if (message.content=='$listen off') {
         message.member.voice.channel.leave();
-        // if (previos_message != null) {
-        //     previos_message.delete()
-        // }
         previos_message = message;
         channel.send("Tạm biệt.");
     }
@@ -125,10 +122,6 @@ client.on('speech', message => {
             case "clear":
             case "queue":
               response = "$".concat(response);
-              // if (previos_message != null) {
-              //     previos_message.delete();
-              // }
-              // previos_message = message;
               channel.send(response);
               break;
           default:
