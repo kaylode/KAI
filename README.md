@@ -8,8 +8,8 @@
 
 
 <details open>
- <summary><strong>Dev logs</strong></summary>
-[22/09/2021] K.A.I is still in optimization stage and not for production purpose. If you want to use for your own server, contact me for guidance. 
+ <summary><strong>Status</strong></summary>
+ <strong><i>[22/09/2021]</i></strong> K.A.I is still in optimization stage and not for production purpose. If you want to use for your own server, contact me for guidance. 
 </details>
 
 ## What is K.A.I ?
@@ -36,7 +36,7 @@ Being inspired by Marvel's Ultron/Jarvis, K.A.I is created as a Discord bot writ
 - UptimeRobot: https://uptimerobot.com/
 
 ## References
-- https://www.freecodecamp.org/news/create-a-discord-bot-with-python/
-- Discord Docs: https://github.com/Rapptz/discord.py/tree/v1.7.3/examples
-- Discord Markdown: https://gist.github.com/matthewzring/9f7bbfd102003963f9be7dbcf7d40e51
-- https://github.com/Rei-x/discord-speech-recognition
+- [Discord Docs](https://github.com/Rapptz/discord.py/tree/v1.7.3/examples)
+- [Discord Markdown](https://gist.github.com/matthewzring/9f7bbfd102003963f9be7dbcf7d40e51)
+- [Starter Tutorial](https://www.freecodecamp.org/news/create-a-discord-bot-with-python/)
+- [Voice recognition](https://github.com/Rei-x/discord-speech-recognition)
