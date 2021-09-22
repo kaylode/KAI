@@ -1,9 +1,9 @@
 {
     "words": {
-        "chao kai": [
+        "chào kai": [
             "Ch\u00e0o {name}, tao l\u00e0 KAI"
         ],
-        "ngu ngon": [
+        "ngủ ngon": [
             "Ch\u00fac {name} ng\u1ee7 ngon!",
             "Ch\u00fac {name} ng\u1ee7 ngon \u2764\ufe0f",
             "Ch\u00fac ng\u1ee7 ngon \ud83d\ude19",
@@ -11,17 +11,17 @@
             "Ng\u1ee7 ngon {name} \ud83e\udd71 \ud83e\udd71 \ud83e\udd71",
             "Ng\u1ee7 ngon m\u01a1 \u0111\u1eb9p {name} \ud83e\udd71 \ud83e\udd71 \ud83e\udd71"
         ],
-        "cu ngan": [
+        "cu ngắn": [
             "M\u00e0y cu ng\u1eafn \u0111\u00f3 {name} :v"
         ],
-        "bot nhu cac": [
+        "bot như cặc": [
             "M\u00e0y nh\u01b0 c\u1eb7c {name}"
         ],
-        "bot nhu cc": [
+        "bot như cc": [
             "M\u00e0y nh\u01b0 cc \u1ea5y {name}"
         ],
         "m ngu vlz kai": [
-            "tao xin loi"
+            "Mày ngu ấy {name}"
         ],
         "***": [
             "Không nói tục chửi thề nhá {name} 😡", 
