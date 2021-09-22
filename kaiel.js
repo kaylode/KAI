@@ -15,6 +15,7 @@ var previos_message = null;
 // Load mapping from database
 const db = require('./database/db.json');
 var dict = db['voice'];
+var word_triggers = db['words'];
 
 function mapTriggerWords(text){
     // Map trigger voice words into trigger commands
@@ -96,6 +97,17 @@ client.on('speech', message => {
         var tokens;
         response = response.toLowerCase();
         response = mapTriggerWords(response);
+
+        // Detect bad words
+        Object.entries(word_triggers).forEach(([key, value]) => {
+            if (response.includes(key)){
+                if (value.includes('{name}')){
+                    value = value.replace('{name}', user);
+                }
+                channel.send(value);
+            }      
+         });
+
         tokens = response.split(" ");
         let trigger = tokens[0];
         switch(trigger) {
