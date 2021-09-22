@@ -15,8 +15,8 @@ def clean_text(text):
         - Remove Vietnamese accent
         - Lowercase
     """
-
-    return unidecode(text.lstrip().rstrip().lower())
+    return text
+    # return unidecode(text.lstrip().rstrip().lower())
 
 
 class Dictionary:
