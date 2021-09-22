@@ -82,7 +82,11 @@
         "wingardium leviosa": [
             "queue"
         ],
-        "xóa danh sách": ["clear"], 
-        "xóa tất cả bài hát": ["clear"]
-    }
+        "xóa danh sách": [
+            "clear"
+        ], 
+        "xóa tất cả bài hát": [
+            "clear"
+        ]
+  }
 }

@@ -96,8 +96,9 @@ client.on('speech', message => {
         response = mapTriggerWords(response);
 
         // Detect bad words
-        Object.entries(word_triggers).forEach(([key, value]) => {
+        Object.entries(word_triggers).forEach(([key, values]) => {
             if (response.includes(key)){
+                value = values[Math.floor(Math.random() *values.length)]
                 if (value.includes('{name}')){
                     value = value.replace('{name}', user);
                 }
