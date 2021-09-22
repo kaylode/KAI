@@ -5,6 +5,9 @@ https://github.com/Rapptz/discord.py/tree/v1.7.3/examples
 
 import os
 import discord
+# them thu vien random
+import random
+#
 from discord.ext import commands, tasks
 
 # from replit import db
@@ -244,7 +247,12 @@ class MyClient(commands.Bot):
                 self.prev_message = None
             await message.channel.send(embed=embed)
 
-        
+        if message.content.starswith('$shuffle'):
+            await message.add_reaction('💗')
+            random.shuffle(self.voice_queue)
+
+
+            
 
 
 # Create new processes to keep server online

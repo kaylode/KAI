@@ -122,6 +122,7 @@ client.on('speech', message => {
             case "listen":
             case "clear":
             case "queue":
+            case "shuffle":   
               response = "$".concat(response);
               channel.send(response);
               break;
