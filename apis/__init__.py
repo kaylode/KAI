@@ -10,6 +10,7 @@ from .alarm import Alarm
 from .music import MusicAPI
 from .wikipedia_api import WikipediaAPI
 from .speech import SpeechToTextAPI
+from .lyrics import LyricsAPI
 
 def get_api(name):
     if name == 'dictionary':
@@ -32,6 +33,8 @@ def get_api(name):
         return MusicAPI()
     if name == 'wikipedia':
         return WikipediaAPI()
+    if name == 'lyricsapi':
+        return LyricsAPI()
         
     print("[Error] Wrong features name. Check .yaml file")
     raise
