@@ -78,22 +78,26 @@ class MyClient(commands.Bot):
         if self.voice_client is None or self.voice_client.is_playing():
             pass            
         else:
-            if len(self.voice_queue) > 0:
-                response = self.voice_queue.pop(0)
-                async with self.ctx.typing():
-                    self.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
+            if len(self.voice_queue) > 0 :
+                if not self.voice_client.is_paused():
+                    response = self.voice_queue.pop(0)
+                    async with self.ctx.typing():
+                        self.voice_client.play(response, after=lambda e: print('Player error: %s' % e) if e else None)
 
-                try:
-                    self.current_song_name = response.title
-                    embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:')
-                    if self.prev_message is not None:
-                        await self.prev_message.delete()
-                    self.prev_message = await self.ctx.send(embed=embed)
-                except:
-                    pass
-                
-                self.voice_counter = 0
+                    try:
+                        self.current_song_name = response.title
+                        embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:')
+                        if self.prev_message is not None:
+                            await self.prev_message.delete()
+                        self.prev_message = await self.ctx.send(embed=embed)
+                    except:
+                        pass
+                    
+                    self.voice_counter = 0
+                else:
+                    self.voice_counter += 10
             else:
+                self.current_song_name = None 
                 self.voice_counter += 10
 
     # @speech_check_async.before_loop
