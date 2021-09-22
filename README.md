@@ -31,6 +31,7 @@ Being inspired by Marvel's Ultron/Jarvis, K.A.I is created as a Discord bot writ
 <a name="myfootnote1"><strong><i>[**]</i></strong></a>: **_Because discord.py does not support recording voice yet. I use another bot written in Javascript to perform speech-to-text._**
 
 ## How to run K.A.I ?
+- Please contact me to setup K.A.I
 - Replit: https://replit.com/@kaylode/
 - UptimeRobot: https://uptimerobot.com/
 
