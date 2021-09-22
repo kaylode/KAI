@@ -6,6 +6,12 @@
   <a style="font-size: 40px; color:red;"> <strong> Hi there, I'm K.A.I </strong> </a>
 </p>
 
+
+<details open>
+ <summary><strong>Dev logs</strong></summary>
+[22/09/2021] K.A.I is still in optimization stage and not for production purpose. If you want to use for your own server, contact me for guidance. 
+</details>
+
 ## What is K.A.I ?
 <!-- K.A.I starts out with only purpose is to serve me and my friends on Discord to stream music from Youtube since other music bots are being shutdown. Then I want to  -->
 Being inspired by Marvel's Ultron/Jarvis, K.A.I is created as a Discord bot written using discord.py that can do a lot of things an AI can do. From basic usage such as customable alarm system, streaming music, translating multiple languages, searching wikipedia, to even more intelligence tasks like computer vision (classification, detection, segmentation, etc), natural language processing (telling jokes, answering questions, chatting)<sup>[*](#myfootnote1)</sup> responsing with voice, or even being voice-controlled 
