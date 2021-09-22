@@ -53,6 +53,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 class MusicAPI():
     """
     Play music from youtube
+    https://github.com/Rapptz/discord.py/blob/master/examples/basic_voice.py
     """
     def __init__(self) -> None:
         self.trigger = "$play"

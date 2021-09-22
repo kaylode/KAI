@@ -15,6 +15,7 @@ def process_response(text):
 class SpeechToTextAPI:
     """
     Speech to text, load from wav file
+    https://github.com/Uberi/speech_recognition
     """
     # translator = Translator()
     sr = sr.Recognizer()

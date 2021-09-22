@@ -6,6 +6,7 @@ wikipedia.set_lang("vi")
 class WikipediaAPI(API):
     """
     Search query from wikipedia
+    https://github.com/goldsmith/Wikipedia
     """
     def __init__(self) -> None:
         super().__init__()
