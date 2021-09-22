@@ -13,7 +13,7 @@
 </details>
 
 ## What is K.A.I ?
-Being inspired by Marvel's Ultron/Jarvis, K.A.I is created as a Discord bot written using discord.py that can do a lot of things an AI can do. From basic usage such as customable alarm system, streaming music, translating multiple languages, searching wikipedia, to even more intelligence tasks like computer vision (classification, detection, segmentation, etc), natural language processing (telling jokes, answering questions, chatting)<sup>[*](#myfootnote1)</sup> responsing with voice, or even being voice-controlled 
+Being inspired by Marvel's Ultron/Jarvis, K.A.I is created as a Discord bot written using discord.py that can do a lot of things an AI can do. From basic usage such as customable alarm system, streaming music, translating multiple languages, searching wikipedia, to even more intelligence tasks like computer vision (classification, detection, segmentation, etc), natural language processing (telling jokes, answering questions, chatting)<sup>[*](#myfootnote1)</sup> responding with voice, or even being voice-controlled 
 
 <a name="myfootnote1"><strong><i>[*]</i></strong></a>: **_With help of GPT-3 technology._**
 
