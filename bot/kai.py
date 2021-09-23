@@ -35,6 +35,8 @@ class KAI(Bot):
                     # If use more than one at the same time, consider removing this
                     if response is not None:
                         break
+            if response is not None:
+                break
                 
         return response, reply
 
