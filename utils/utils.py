@@ -1,6 +1,11 @@
 import discord
 import wave
 
+def split_text_into_paragraphs(text, size=30):
+    lines = text.split('\n')
+    paragraphs = ['\n'.join(lines[i:i + size]) for i in range(0, len(lines), size)]
+    return paragraphs
+    
 def makeEmbed(text, title=None, field_name=None, colour=discord.Colour.red()):
     retStr = str(f"```css\n{text}```")
     embed = discord.Embed(title=title, colour=colour)

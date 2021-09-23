@@ -13,7 +13,7 @@ from server import keep_alive
 from bot import KAI
 from configs import get_config
 from apis import GoogleVoiceAPI, Alarm
-from utils.utils import makeEmbed
+from utils.utils import makeEmbed, split_text_into_paragraphs
 from utils.pages import Pages
 
 TEST_CHANNEL_ID = 865577241048383492
@@ -154,6 +154,14 @@ class MyClient(commands.Bot):
         """
         await channel.send(file=response)
 
+    async def on_page_response(self, channel, response):
+        """
+        If response is file. Send file
+        """
+        self.pages.append(response)
+        message = await response.send_page(channel)
+        return message
+        
     async def on_response(self, response, message, voice_state, reply):
         """
         Deal with every kinds of response
@@ -174,8 +182,7 @@ class MyClient(commands.Bot):
             self.prev_message = await self.on_embed_response(message.channel, response)
 
         if isinstance(response, Pages):
-            self.pages.append(response)
-            message = await response.send_page(message.channel)
+            await self.on_page_response(message.channel, response)
 
     async def on_reaction_add(self, reaction, user):
         """
@@ -288,11 +295,22 @@ class MyClient(commands.Bot):
             else:
                 result_string = '\n'.join(result_string)
             
-            embed = makeEmbed(result_string, 'Music :musical_note:', field_name='Queue', colour=discord.Colour.blue())
+            result_string = split_text_into_paragraphs(result_string, size=5)
+            
+            # embed = makeEmbed(result_string, 'Music :musical_note:', field_name='Queue', colour=discord.Colour.blue())
+            pages = Pages(
+                result_string,
+                title='Music :musical_note:',
+                field_name='Queue',
+                colour=discord.Colour.blue(),
+                reactions=["◀️", "▶️"]
+            )
+            
             if self.prev_message is not None:
                 await self.prev_message.delete()
                 self.prev_message = None
-            await message.channel.send(embed=embed)
+            # await message.channel.send(embed=embed)
+            await self.on_page_response(message.channel, pages)
 
         if message.content.startswith('$shuffle'):
             await message.add_reaction('💗')

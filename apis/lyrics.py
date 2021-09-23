@@ -2,7 +2,7 @@ import os
 import types
 import discord
 from .base import API
-from utils.utils import makeEmbed
+from utils.utils import makeEmbed, split_text_into_paragraphs
 from utils.pages import Pages
 from lyrics_extractor import SongLyrics
 
@@ -25,11 +25,6 @@ def loibaihatbiz_scraper(self):
 
     lyrics = (extract[0].get_text()).replace('<br>', '\n').strip()
     return lyrics
-
-def split_text_into_paragraphs(text, size=30):
-    lines = text.split('\n')
-    paragraphs = ['\n'.join(lines[i:i + size]) for i in range(0, len(lines), size)]
-    return paragraphs
 
 def make_pages_embed(paragraphs, title):
     embeds = []
