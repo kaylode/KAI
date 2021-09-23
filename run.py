@@ -73,7 +73,7 @@ class MyClient(commands.Bot):
 
                     try:
                         self.current_song_name = response.title
-                        embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:')
+                        embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:', color=discord.Colour.blue())
                         if self.prev_message is not None:
                             await self.prev_message.delete()
                         self.prev_message = await self.on_embed_response(self.ctx.channel, embed)
@@ -136,7 +136,7 @@ class MyClient(commands.Bot):
 
         self.voice_queue.append(response)
         try:
-            response = makeEmbed(response.title, 'Music :musical_note:', 'Queueing')
+            response = makeEmbed(response.title, 'Music :musical_note:', 'Queueing', color=discord.Colour.blue())
             await self.on_embed_response(channel, response)
         except:
             pass

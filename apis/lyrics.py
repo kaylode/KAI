@@ -1,6 +1,8 @@
 import os
 import types
+import discord
 from .base import API
+from utils.utils import makeEmbed
 from lyrics_extractor import SongLyrics
 
 GCS_API_KEY = os.getenv('GCS_API_KEY')
@@ -28,6 +30,13 @@ def split_text_into_paragraphs(text, size=10):
     paragraphs = ['\n'.join(lines[i:i + size]) for i in range(0, len(lines), size)]
     return paragraphs
 
+def make_pages_embed(paragraphs, title):
+    embeds = []
+    for i, paragraph in enumerate(paragraphs):
+        embed = makeEmbed(paragraph, 'Lyric :musical_score:', f'Page {i}/{len(paragraphs)}', color=discord.Colour.orange())
+        embeds.append(embed)
+
+    return embeds
 
 # Assign new crawl method to library class
 SongLyrics.scraper_factory.lyricsvn_scraper = lyricsvn_scraper
@@ -58,8 +67,12 @@ class LyricsAPI(API):
         Get lyrics of the song
         """
         try:
-            response = self.songlyrics.get_lyrics(command)['lyrics']
-            response = split_text_into_paragraphs(response)
+            crawled = self.songlyrics.get_lyrics(command)
+            lyrics = crawled['lyrics']
+            title = crawled['title']
+            paragraphs = split_text_into_paragraphs(lyrics)
+            response = make_pages_embed(paragraphs, title)
+            
         except:
             response = "Lyric not found"
         reply = True
