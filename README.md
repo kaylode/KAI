@@ -41,3 +41,11 @@ Being inspired by Marvel's Ultron/Jarvis, K.A.I is created as a Discord bot writ
 - [Discord Markdown](https://gist.github.com/matthewzring/9f7bbfd102003963f9be7dbcf7d40e51)
 - [Starter Tutorial](https://www.freecodecamp.org/news/create-a-discord-bot-with-python/)
 - [Voice recognition](https://github.com/Rei-x/discord-speech-recognition)
+
+## Contact
+
+<p align="center">
+ <a><img height=40px href="https://discordapp.com/users/326944513396441089" src="https://seeklogo.com/images/D/discord-color-logo-E5E6DFEF80-seeklogo.com.png"></a>
+</p>
+
+
