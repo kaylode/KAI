@@ -1,7 +1,7 @@
 import discord
 import wave
 
-def makeEmbed(text, title=None, field_name=None, colour="0x992d22"):
+def makeEmbed(text, title=None, field_name=None, colour=discord.Colour.red()):
     retStr = str(f"```css\n{text}```")
     embed = discord.Embed(title=title, colour=colour)
 
