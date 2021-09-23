@@ -25,7 +25,7 @@ def loibaihatbiz_scraper(self):
     lyrics = (extract[0].get_text()).replace('<br>', '\n').strip()
     return lyrics
 
-def split_text_into_paragraphs(text, size=10):
+def split_text_into_paragraphs(text, size=20):
     lines = text.split('\n')
     paragraphs = ['\n'.join(lines[i:i + size]) for i in range(0, len(lines), size)]
     return paragraphs
@@ -33,7 +33,7 @@ def split_text_into_paragraphs(text, size=10):
 def make_pages_embed(paragraphs, title):
     embeds = []
     for i, paragraph in enumerate(paragraphs):
-        embed = makeEmbed(paragraph, 'Lyric :musical_score:', f'Page {i}/{len(paragraphs)}', color=discord.Colour.orange())
+        embed = makeEmbed(paragraph, 'Lyric :musical_score:', f'Page {i+1}/{len(paragraphs)}', colour=discord.Colour.orange())
         embeds.append(embed)
 
     return embeds

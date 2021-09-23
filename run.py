@@ -73,7 +73,7 @@ class MyClient(commands.Bot):
 
                     try:
                         self.current_song_name = response.title
-                        embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:', color=discord.Colour.blue())
+                        embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:', colour=discord.Colour.blue())
                         if self.prev_message is not None:
                             await self.prev_message.delete()
                         self.prev_message = await self.on_embed_response(self.ctx.channel, embed)
@@ -136,7 +136,7 @@ class MyClient(commands.Bot):
 
         self.voice_queue.append(response)
         try:
-            response = makeEmbed(response.title, 'Music :musical_note:', 'Queueing', color=discord.Colour.blue())
+            response = makeEmbed(response.title, 'Music :musical_note:', 'Queueing', colour=discord.Colour.blue())
             await self.on_embed_response(channel, response)
         except:
             pass
@@ -203,7 +203,7 @@ class MyClient(commands.Bot):
             if self.audio_async.is_running():
                 self.audio_async.stop()
 
-            embed = makeEmbed("Disconnected due to inactivity over 5 minutes", field_name='Disconnected')
+            embed = makeEmbed("Disconnected due to inactivity over 5 minutes", field_name='Disconnected', colour=discord.Colour.red())
             if self.prev_message is not None:
                 await self.prev_message.delete()
             self.prev_message = await message.channel.send(embed=embed)
@@ -261,7 +261,7 @@ class MyClient(commands.Bot):
             else:
                 result_string = '\n'.join(result_string)
             
-            embed = makeEmbed(result_string, 'Music :musical_note:', field_name='Queue')
+            embed = makeEmbed(result_string, 'Music :musical_note:', field_name='Queue', colour=discord.Colour.blue())
             if self.prev_message is not None:
                 await self.prev_message.delete()
                 self.prev_message = None
