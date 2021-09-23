@@ -5,9 +5,7 @@ https://github.com/Rapptz/discord.py/tree/v1.7.3/examples
 
 import os
 import discord
-# them thu vien random
 import random
-#
 from discord.ext import commands, tasks
 
 # from replit import db
@@ -16,6 +14,7 @@ from bot import KAI
 from configs import get_config
 from apis import GoogleVoiceAPI, Alarm
 from utils.utils import makeEmbed
+from utils.pages import Pages
 
 TEST_CHANNEL_ID = 865577241048383492
 ASTROMENZ_CHANNEL_ID = 760897275890368525
@@ -40,6 +39,9 @@ class MyClient(commands.Bot):
         self.voice_queue = []
         self.prev_message = None
         self.current_song_name = None 
+
+        # Pages
+        self.pages = []
         
         # Alarm
         self.alarm = Alarm()
@@ -119,11 +121,16 @@ class MyClient(commands.Bot):
             # Else send text
             return await channel.send(response)
     
-    async def on_embed_response(self, channel, response):
+    async def on_embed_response(self, channel, response, reactions=None):
         """
         If response is an embed. Embed it
         """
-        return await channel.send(embed=response)
+        if reactions is None:
+            return await channel.send(embed=response)
+        else:
+            message = await channel.send(embed=response)
+            for reaction in reactions:
+                await message.add_reaction(reaction)
 
     async def on_voice_response(self, response, voice_state=None, channel=None):
         """
@@ -163,6 +170,19 @@ class MyClient(commands.Bot):
         if isinstance(response, discord.Embed):
             self.prev_message = await self.on_embed_response(message.channel, response)
 
+        if isinstance(response, Pages):
+            message = await response.send_page(message.channel)
+
+
+
+    # async def on_reaction_add(self, reaction, user):
+    #     for page in self.pages:
+    #         if reaction.message.id:
+    #             pass
+            
+    #     if reaction.emoji == "🏃":
+    #         Role = discord.utils.get(user.server.roles, name="YOUR_ROLE_NAME_HERE")
+    #         await client.add_roles(user, Role)
 
     async def on_message(self, message):
         if message.author == client.user:
