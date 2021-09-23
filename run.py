@@ -155,6 +155,9 @@ class MyClient(commands.Bot):
         await channel.send(file=response)
 
     async def on_response(self, response, message, voice_state, reply):
+        """
+        Deal with every kinds of response
+        """
         if isinstance(response, discord.File):
             # Image file
             await self.on_file_response(message.channel, response)
@@ -175,6 +178,9 @@ class MyClient(commands.Bot):
             message = await response.send_page(message.channel)
 
     async def on_reaction_add(self, reaction, user):
+        """
+        On reaction add to page
+        """
         for page in self.pages:
             if reaction.message.id == page.id:
                 if str(reaction.emoji) == page.next_btn:
