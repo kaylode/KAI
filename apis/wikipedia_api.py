@@ -10,7 +10,7 @@ class WikipediaAPI(API):
     """
     def __init__(self) -> None:
         super().__init__()
-        self.trigger = "$wiki"
+        self.triggers = ["$wiki"]
 
     def do_command(self, command):
         """

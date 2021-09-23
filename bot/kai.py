@@ -16,24 +16,25 @@ class KAI(Bot):
         reply = False
         
         for api_object in self.apis:
-            # If message contains trigger words
-            if message.content.startswith(api_object.trigger):
-                if api_object.trigger != '':
-                    # Special calls
-                    command = message.content.split(api_object.trigger)[-1].lstrip().rstrip() # Get and clean command
-                    response, reply = api_object.do_command(command)    # Execute command
-                else:
-                    # Normal message, use dictionay to check
-                    command = message.content
-                    dict = {
-                        'name': message.author.name
-                    }
-                    response, reply = api_object.do_command(command, dict)
+            for trigger in api_object.triggers:
+                # If message contains trigger words
+                if message.content.startswith(trigger):
+                    if trigger != '':
+                        # Special calls
+                        command = message.content.split(trigger)[-1].lstrip().rstrip() # Get and clean command
+                        response, reply = api_object.do_command(command)    # Execute command
+                    else:
+                        # Normal message, use dictionay to check
+                        command = message.content
+                        dict = {
+                            'name': message.author.name
+                        }
+                        response, reply = api_object.do_command(command, dict)
 
-                # Safe key for only one api is called at the time
-                # If use more than one at the same time, consider removing this
-                if response is not None:
-                    break
+                    # Safe key for only one api is called at the time
+                    # If use more than one at the same time, consider removing this
+                    if response is not None:
+                        break
                 
         return response, reply
 

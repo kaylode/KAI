@@ -16,7 +16,7 @@ class GoogleTranslationAPI(API):
     """
     def __init__(self) -> None:
         super().__init__()
-        self.trigger = "$translate"
+        self.triggers = ["$translate"]
         self.translator = Translator()
 
     def do_command(self, command):

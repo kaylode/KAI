@@ -20,10 +20,15 @@ help_dict = {
 
     '$openai': '\t\t\tChat with OpenAI GPT-3. Ex: $openai "mày tên gì ?"',
 
-    '$play': '\t\t\tPlay song from Youtube. Ex: $play music',
-    '$pause': '\t\t\tPause song. Ex: $pause',
-    '$resume': '\t\t\Resume song. Ex: $resume',
-    '$skip': '\t\t\tSkip to next song. Ex: $skip',
+    "song": {
+        '$play': '\t\t\tPlay song from Youtube. Ex: $play music',
+        '$pause': '\t\t\tPause song. Ex: $pause',
+        '$resume': '\t\t\Resume song. Ex: $resume',
+        '$skip': '\t\t\tSkip to ith song. Ex: $skip 5',
+        '$next': '\t\t\tSkip to next song. Ex: $next',
+        '$clear': '\t\t\tClear song queue. Ex: $clear',
+        '$queue': '\t\t\tShow song queue. Ex: $queue',
+    }
 }
 
 class Helper:
@@ -31,7 +36,7 @@ class Helper:
     Helper class for printing BOT information
     """
     def __init__(self) -> None:
-        self.trigger = "$help"
+        self.triggers = ["$help"]
 
     def do_command(self, command):
         """

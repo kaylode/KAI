@@ -13,7 +13,7 @@ class KaylodeAPI(API):
     """
     def __init__(self) -> None:
         super().__init__()
-        self.trigger = "$ai"
+        self.triggers = ["$ai"]
         self.url = ""
 
     def do_command(self, command):

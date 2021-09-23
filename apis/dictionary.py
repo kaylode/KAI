@@ -24,7 +24,7 @@ class Dictionary:
     Dictionary for mapping special words in message
     """
     def __init__(self) -> None:
-        self.trigger = ""
+        self.triggers = ["$updatedb", "$deletedb", "$savedb", "$listdb", "", "$gettime"]
         self.db = None
         db = self.load_database()
         self.set_database(db)

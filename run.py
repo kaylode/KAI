@@ -179,6 +179,8 @@ class MyClient(commands.Bot):
             await self.on_string_response(message.channel, response, reply, voice_state)
 
         if isinstance(response, discord.Embed):
+            if self.prev_message is not None:
+                await self.prev_message.delete()
             self.prev_message = await self.on_embed_response(message.channel, response)
 
         if isinstance(response, Pages):

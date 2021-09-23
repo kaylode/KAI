@@ -28,7 +28,7 @@ class CovidAPI(API):
     """
     def __init__(self) -> None:
         super().__init__()
-        self.trigger = "$covid"
+        self.triggers = ["$covid"]
         self.url = "https://api.covid19api.com/"
         # 'https://api.covid19api.com/country/vietnam/status/{confirmed, recovered, deaths}'
 

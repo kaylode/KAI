@@ -50,7 +50,7 @@ class LyricsAPI(API):
     """
     def __init__(self) -> None:
         super().__init__()
-        self.trigger = '$lyric'
+        self.triggers = ['$lyric']
 
         self.songlyrics = SongLyrics(GCS_API_KEY, GCS_ENGINE_ID)
         self.songlyrics.scraper_factory.lyricsvn_scraper = types.MethodType(lyricsvn_scraper, self.songlyrics.scraper_factory) 

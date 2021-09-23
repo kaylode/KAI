@@ -23,7 +23,7 @@ class GoogleVoiceAPI(API):
     translator = Translator()
     def __init__(self) -> None:
         super().__init__()
-        self.trigger = "$speak"
+        self.triggers = ["$speak"]
 
     @staticmethod
     def speak(text, lang=None):

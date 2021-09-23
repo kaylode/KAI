@@ -13,7 +13,7 @@ class FoodAPI(API):
     """
     def __init__(self) -> None:
         super().__init__()
-        self.trigger = "$food"
+        self.triggers = ["$food"]
         self.url = ""
 
     def do_command(self, command):

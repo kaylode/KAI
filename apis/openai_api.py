@@ -20,7 +20,7 @@ class OpenAIAPI(API):
     """
     def __init__(self) -> None:
         super().__init__()
-        self.trigger = "$openai"
+        self.triggers = ["$openai"]
         self.model = openai.Completion
         self.type = "chat"
         self.current_prompt = {
