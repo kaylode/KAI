@@ -18,15 +18,15 @@ Being inspired by Marvel's Ultron/Jarvis, K.A.I is created as a Discord bot writ
 <a name="myfootnote1"><strong><i>[*]</i></strong></a>: **_With help of GPT-3 technology._**
 
 ## What can K.A.I do ?
-- Customable Alarm
-- Wiki search
-- Stream music from Youtube
+- [Customable Alarm](https://github.com/kaylode/KAI/wiki/Features:-Customable-Alarm)
+- [Wiki search](https://github.com/kaylode/KAI/wiki/Features:-Wiki-search)
+- [Stream music from Youtube](https://github.com/kaylode/KAI/wiki/Features:-Stream-Youtube)
 - Covid 19 information
-- Voice control (English/Vietnamese) <sup>[**](#myfootnote1)</sup>
-- Basic Computer Vision Model API
-- OpenAI GPT-3 Chatbot
-- Google Translate
-- Google Text-to-speech 
+- [Voice control (English/Vietnamese)](https://github.com/kaylode/KAI/wiki/Features:-Voice-control) <sup>[**](#myfootnote1)</sup>
+- [Basic Computer Vision Model API](https://github.com/kaylode/KAI/wiki/Features:-Computer-Vision)
+- [OpenAI GPT-3 Chatbot](https://github.com/kaylode/KAI/wiki/Featues:-Chatbot)
+- [Google Translate](https://github.com/kaylode/KAI/wiki/Features:-Google-Translate)
+- [Google Text-to-speech](https://github.com/kaylode/KAI/wiki/Features:-Text-to-Speech) 
 
 <a name="myfootnote1"><strong><i>[**]</i></strong></a>: **_Because discord.py does not support recording voice yet. I use another bot written in Javascript to perform speech-to-text._**
 
