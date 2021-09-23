@@ -183,11 +183,13 @@ class MyClient(commands.Bot):
         """
         for page in self.pages:
             if reaction.message.id == page.id:
-                if str(reaction.emoji) == page.next_btn:
-                    await page.next_page(reaction.message.channel)
-                    break
                 if str(reaction.emoji) == page.prev_btn:
-                    await page.previous_page(reaction.message.channel)
+                    await page.previous_page(reaction.message)
+                    await reaction.message.remove_reaction(reaction.emoji, user)
+                    break
+                if str(reaction.emoji) == page.next_btn:
+                    await page.next_page(reaction.message)
+                    await reaction.message.remove_reaction(reaction.emoji, user)
                     break
 
     async def on_message(self, message):

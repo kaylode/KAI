@@ -21,14 +21,14 @@ class Pages:
         self.id = None
 
 
-        self.prev_btn = reaction_map['PREV']
-        self.next_btn = reaction_map['NEXT']
+        self.prev_btn = None
+        self.next_btn = None
 
     def make_page(self):
         """
         Embed the current page
         """
-        content = self.list_of_contents[self.current_page]
+        content = self.list_of_contents[self.current_page-1]
         dict = {
             'page_id': self.current_page
         }
@@ -46,16 +46,20 @@ class Pages:
         Send current page to channel
         """
         embed = self.make_page()
+
         message = await channel.send(embed=embed)
 
         if self.reactions is not None:
             for reaction in self.reactions:
                 await message.add_reaction(reaction)
+        
+        self.prev_btn = reaction_map['PREV']
+        self.next_btn = reaction_map['NEXT']
 
         self.id = message.id
         return message
 
-    async def next_page(self, channel):
+    async def next_page(self, message):
         """
         Send next page to channel
         """
@@ -64,9 +68,11 @@ class Pages:
             return
         else:
             self.current_page += 1
-            return self.send_page(channel)
+            embed = self.make_page()
+            message = await message.edit(embed=embed)
+            return message
 
-    async def previous_page(self, channel):
+    async def previous_page(self, message):
         """
         Send previous page to channel
         """
@@ -74,4 +80,6 @@ class Pages:
             return
         else:
             self.current_page -= 1
-            return self.send_page(channel)
+            embed = self.make_page()
+            message = await message.edit(embed=embed)
+            return message
