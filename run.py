@@ -171,18 +171,17 @@ class MyClient(commands.Bot):
             self.prev_message = await self.on_embed_response(message.channel, response)
 
         if isinstance(response, Pages):
+            self.pages.append(response)
             message = await response.send_page(message.channel)
 
-
-
-    # async def on_reaction_add(self, reaction, user):
-    #     for page in self.pages:
-    #         if reaction.message.id:
-    #             pass
+    async def on_reaction_add(self, reaction, user):
+        for page in self.pages:
+            if reaction.message.id == page.id:
+                print('yes')
             
-    #     if reaction.emoji == "🏃":
-    #         Role = discord.utils.get(user.server.roles, name="YOUR_ROLE_NAME_HERE")
-    #         await client.add_roles(user, Role)
+        # if reaction.emoji == "🏃":
+        #     Role = discord.utils.get(user.server.roles, name="YOUR_ROLE_NAME_HERE")
+        #     await client.add_roles(user, Role)
 
     async def on_message(self, message):
         if message.author == client.user:
