@@ -14,8 +14,8 @@ from discord.ext import commands, tasks
 from server import keep_alive
 from bot import KAI
 from configs import get_config
-from apis import GoogleVoiceAPI, Alarm, SpeechToTextAPI, MusicAPI
-from utils.utils import makeEmbed, convertPCM2WAV
+from apis import GoogleVoiceAPI, Alarm
+from utils.utils import makeEmbed
 
 TEST_CHANNEL_ID = 865577241048383492
 ASTROMENZ_CHANNEL_ID = 760897275890368525
@@ -58,24 +58,8 @@ class MyClient(commands.Bot):
             response = self.alarm.time_check()
             if channel is not None and response is not None:
                 await channel.send(response)
-                print(chr(27) + "[2J")
+                print(chr(27) + "[2J") # Clear console logs at specific time
 
-    # @tasks.loop(seconds=5) # task runs every x seconds
-    # async def speech_check_async(self):
-    #     if os.path.exists('./.cache/recording.pcm'):
-    #         if os.path.exists('./.cache/recording.wav'):
-    #             text = SpeechToTextAPI.speak(lang='en-US')
-    #             print(text)
-    #             if text is not None:
-    #                 channel = self.get_channel(TEST_CHANNEL_ID)
-    #                 await channel.send(text)
-    #                 # response_voice = GoogleVoiceAPI.speak(text=text, lang='vi')
-    #                 # self.voice_client.play(response_voice, after=lambda e: print('Player error: %s' % e) if e else None)
-    #             os.remove('./.cache/recording.pcm')
-    #             os.remove('./.cache/recording.wav')
-    #         else:
-    #             convertPCM2WAV()
-    
     @tasks.loop(seconds=10) # task runs every 60 seconds
     async def audio_async(self):
         if self.voice_client is None or self.voice_client.is_playing():
@@ -92,7 +76,7 @@ class MyClient(commands.Bot):
                         embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:')
                         if self.prev_message is not None:
                             await self.prev_message.delete()
-                        self.prev_message = await self.ctx.send(embed=embed)
+                        self.prev_message = await self.on_embed_response(self.ctx.channel, embed)
                     except:
                         pass
                     
@@ -103,26 +87,73 @@ class MyClient(commands.Bot):
                 self.current_song_name = None 
                 self.voice_counter += 10
 
-    # @speech_check_async.before_loop
     @audio_async.before_loop
     @time_check_async.before_loop
     async def before_my_task(self):
         await self.wait_until_ready() # wait until the bot logs in
 
+    async def join_voice_channel(self, voice_state):
+        """
+        Joining a voice channel
+        """
+        # Get the channel of author
+        if voice_state is not None:
+            voice_channel = voice_state.channel 
+
+            # If hasn't joined, join voice channel
+            voice = discord.utils.get(client.voice_clients, guild=self.ctx.guild)
+            if voice is None:
+                await voice_channel.connect()
+                self.voice_client = self.ctx.voice_client
+
+    async def on_string_response(self, channel, response, reply=False, voice_state=None):
+        """
+        If reponse is string. Reply it by text or voice
+        """
+
+        if self.voice_on and reply:
+            # If voice on, speak it
+            response_voice = GoogleVoiceAPI.speak(text=response, lang='vi')
+            await self.on_voice_response(response_voice, voice_state, channel)
+        else:
+            # Else send text
+            return await channel.send(response)
+    
+    async def on_embed_response(self, channel, response):
+        """
+        If response is an embed. Embed it
+        """
+        return await channel.send(embed=response)
+
+    async def on_voice_response(self, response, voice_state=None, channel=None):
+        """
+        If response is voice. Check voice channel connection then initialize voice queue
+        """
+        if not self.audio_async.is_running():
+            self.audio_async.start()
+    
+        await self.join_voice_channel(voice_state)
+
+        self.voice_queue.append(response)
+        try:
+            response = makeEmbed(response.title, 'Music :musical_note:', 'Queueing')
+            await self.on_embed_response(channel, response)
+        except:
+            pass
+        
+    async def on_file_response(self, channel, response):
+        """
+        If response is file. Send file
+        """
+        await channel.send(file=response)
+
     async def on_message(self, message):
         if message.author == client.user:
             return
 
+        
         self.ctx = await client.get_context(message)
-
-        # Whether author connect to voice channel
         voice_state = self.ctx.message.author.voice 
-
-        # Get the channel of author
-        if voice_state is not None:
-            voice_channel = voice_state.channel 
-        else:
-            voice_channel = None
 
         # Process message and get response 
         response, reply = self.bot.response(message)
@@ -143,38 +174,19 @@ class MyClient(commands.Bot):
         if response is not None:
             if isinstance(response, discord.File):
                 # Image file
-                await message.channel.send(file=response)
-            elif isinstance(response, discord.PCMVolumeTransformer):
-                if not self.audio_async.is_running():
-                    self.audio_async.start()
-                
-                voice = discord.utils.get(client.voice_clients, guild=self.ctx.guild)
-                if voice is None: # If hasn't joined, join voice channel
-                    await voice_channel.connect()
-                self.voice_client = self.ctx.voice_client
+                await self.on_file_response(message.channel, response)
+                await message.add_reaction('💗')
 
-                self.voice_queue.append(response)
-                try:
-                    embed = makeEmbed(response.title, 'Music :musical_note:', 'Queueing')
-                    if self.prev_message is not None:
-                        await self.prev_message.delete()
-                    self.prev_message = await message.channel.send(embed=embed)
-                except:
-                    pass
+            if isinstance(response, discord.PCMVolumeTransformer):
+                await self.on_voice_response(response, voice_state, message.channel)
                 await message.add_reaction('💗')
               
-            else:
-                # Send message
-                if self.voice_on and reply:
-                    if voice_state is not None: # Check if author is in voice channel
-                        voice = discord.utils.get(client.voice_clients, guild=self.ctx.guild)
-                        if voice is None: # If hasn't joined, join voice channel
-                            await voice_channel.connect()
-                            
-                        response_voice = GoogleVoiceAPI.speak(text=response, lang='vi')
-                        self.ctx.voice_client.play(response_voice, after=lambda e: print('Player error: %s' % e) if e else None)
-                    
-                await message.channel.send(response)
+            if isinstance(response, str):
+                await self.on_string_response(message.channel, response, reply, voice_state)
+
+            if isinstance(response, discord.Embed):
+                self.prev_message = await self.on_embed_response(message.channel, response)
+
 
         if self.voice_counter > 300: 
             self.voice_counter = 0
@@ -247,7 +259,7 @@ class MyClient(commands.Bot):
                 self.prev_message = None
             await message.channel.send(embed=embed)
 
-        if message.content.starswith('$shuffle'):
+        if message.content.startswith('$shuffle'):
             await message.add_reaction('💗')
             random.shuffle(self.voice_queue)
 
