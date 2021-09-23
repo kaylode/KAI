@@ -1,6 +1,11 @@
 import discord
 from utils.utils import makeEmbed
 
+reaction_map = {
+    'PREV': "◀️",
+    'NEXT': "▶️",
+}
+
 class Pages:
     """
     Pagination class for multiple embeds
@@ -14,6 +19,10 @@ class Pages:
         self.current_page = 1
         self.reactions = reactions
         self.id = None
+
+
+        self.prev_btn = reaction_map['PREV']
+        self.next_btn = reaction_map['NEXT']
 
     def make_page(self):
         """
@@ -42,6 +51,27 @@ class Pages:
         if self.reactions is not None:
             for reaction in self.reactions:
                 await message.add_reaction(reaction)
-                
+
         self.id = message.id
         return message
+
+    async def next_page(self, channel):
+        """
+        Send next page to channel
+        """
+
+        if self.current_page == self.num_pages:
+            return
+        else:
+            self.current_page += 1
+            return self.send_page(channel)
+
+    async def previous_page(self, channel):
+        """
+        Send previous page to channel
+        """
+        if self.current_page == 1:
+            return
+        else:
+            self.current_page -= 1
+            return self.send_page(channel)

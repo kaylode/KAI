@@ -177,17 +177,17 @@ class MyClient(commands.Bot):
     async def on_reaction_add(self, reaction, user):
         for page in self.pages:
             if reaction.message.id == page.id:
-                print('yes')
-            
-        # if reaction.emoji == "🏃":
-        #     Role = discord.utils.get(user.server.roles, name="YOUR_ROLE_NAME_HERE")
-        #     await client.add_roles(user, Role)
+                if str(reaction.emoji) == page.next_btn:
+                    await page.next_page(reaction.message.channel)
+                    break
+                if str(reaction.emoji) == page.prev_btn:
+                    await page.previous_page(reaction.message.channel)
+                    break
 
     async def on_message(self, message):
         if message.author == client.user:
             return
 
-        
         self.ctx = await client.get_context(message)
         voice_state = self.ctx.message.author.voice 
 
