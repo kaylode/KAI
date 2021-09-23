@@ -144,7 +144,9 @@ class MyClient(commands.Bot):
         self.voice_queue.append(response)
         try:
             response = makeEmbed(response.title, 'Music :musical_note:', 'Queueing', colour=discord.Colour.blue())
-            await self.on_embed_response(channel, response)
+            if self.prev_message is not None:
+                await self.prev_message.delete()
+            self.prev_message = await self.on_embed_response(channel, response)
         except:
             pass
         
