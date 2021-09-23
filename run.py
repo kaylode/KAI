@@ -147,6 +147,23 @@ class MyClient(commands.Bot):
         """
         await channel.send(file=response)
 
+    async def on_response(self, response, message, voice_state, reply):
+        if isinstance(response, discord.File):
+            # Image file
+            await self.on_file_response(message.channel, response)
+            await message.add_reaction('💗')
+
+        if isinstance(response, discord.PCMVolumeTransformer):
+            await self.on_voice_response(response, voice_state, message.channel)
+            await message.add_reaction('💗')
+            
+        if isinstance(response, str):
+            await self.on_string_response(message.channel, response, reply, voice_state)
+
+        if isinstance(response, discord.Embed):
+            self.prev_message = await self.on_embed_response(message.channel, response)
+
+
     async def on_message(self, message):
         if message.author == client.user:
             return
@@ -172,20 +189,11 @@ class MyClient(commands.Bot):
 
         # Deal with response
         if response is not None:
-            if isinstance(response, discord.File):
-                # Image file
-                await self.on_file_response(message.channel, response)
-                await message.add_reaction('💗')
-
-            if isinstance(response, discord.PCMVolumeTransformer):
-                await self.on_voice_response(response, voice_state, message.channel)
-                await message.add_reaction('💗')
-              
-            if isinstance(response, str):
-                await self.on_string_response(message.channel, response, reply, voice_state)
-
-            if isinstance(response, discord.Embed):
-                self.prev_message = await self.on_embed_response(message.channel, response)
+            if isinstance(response, list):
+                for r in response:
+                    await self.on_response(r, message, voice_state, reply)
+            else:
+                await self.on_response(response, message, voice_state, reply)
 
 
         if self.voice_counter > 300: 
