@@ -1,4 +1,4 @@
-# K.A.I - an artificial intelligence Discord Bot
+# K.A.I - an artificial intelligence Discord Bot (supports Vietnamese/English)
 
 <p align="center">
  <a><img height=300px src="./avatar/kai.jpg"></a>
