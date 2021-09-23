@@ -45,7 +45,7 @@ Being inspired by Marvel's Ultron/Jarvis, K.A.I is created as a Discord bot writ
 ## Contact
 
 <p align="center">
- <a><img height=40px href="https://discordapp.com/users/326944513396441089" src="https://seeklogo.com/images/D/discord-color-logo-E5E6DFEF80-seeklogo.com.png"></a>
+ <a href="https://discordapp.com/users/326944513396441089"><img height=40px src="https://seeklogo.com/images/D/discord-color-logo-E5E6DFEF80-seeklogo.com.png"></a>
 </p>
 
 
