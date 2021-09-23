@@ -232,10 +232,11 @@ class MyClient(commands.Bot):
 
         if self.voice_counter > 300: 
             self.voice_counter = 0
-            await self.voice_client.disconnect()
-            self.voice_client = None
+            self.pages = []
             if self.audio_async.is_running():
                 self.audio_async.stop()
+            await self.voice_client.disconnect()
+            self.voice_client = None
 
             embed = makeEmbed("Disconnected due to inactivity over 5 minutes", field_name='Disconnected', colour=discord.Colour.red())
             if self.prev_message is not None:

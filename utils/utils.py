@@ -1,7 +1,7 @@
 import discord
 import wave
 
-def split_text_into_paragraphs(text, size=30):
+def split_text_into_paragraphs(text, size=20):
     lines = text.split('\n')
     paragraphs = ['\n'.join(lines[i:i + size]) for i in range(0, len(lines), size)]
     return paragraphs

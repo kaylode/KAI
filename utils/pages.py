@@ -1,4 +1,5 @@
 import discord
+import asyncio
 from utils.utils import makeEmbed
 
 reaction_map = {
@@ -20,9 +21,8 @@ class Pages:
         self.reactions = reactions
         self.id = None
 
-
-        self.prev_btn = None
-        self.next_btn = None
+        self.prev_btn = reaction_map['PREV']
+        self.next_btn = reaction_map['NEXT']
 
     def make_page(self):
         """
@@ -53,9 +53,7 @@ class Pages:
             for reaction in self.reactions:
                 await message.add_reaction(reaction)
         
-        self.prev_btn = reaction_map['PREV']
-        self.next_btn = reaction_map['NEXT']
-
+        await asyncio.sleep(1) # wait for on_reaction first
         self.id = message.id
         return message
 
