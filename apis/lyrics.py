@@ -72,7 +72,7 @@ class LyricsAPI(API):
             response = Pages(
                 paragraphs, 
                 title='Lyric :musical_score:', 
-                field_name= "Page {page_id}" + f'/{len(paragraphs)}', 
+                field_name= "Page {page_id}" + f'/{len(paragraphs)}: {title}', 
                 colour=discord.Colour.orange(),
                 reactions=self.reactions)
             # response = make_pages_embed(paragraphs, title)
