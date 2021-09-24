@@ -260,7 +260,7 @@ class MyClient(commands.Bot):
             await message.add_reaction('💗')
         if message.content.startswith('$skip'):
             num_songs = message.content.split('$skip')[-1].lstrip().rstrip()
-            if num_songs.isspace():
+            if num_songs == '':
                 num_songs = 1
             try:
                 num_songs = int(num_songs)
