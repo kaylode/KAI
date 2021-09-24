@@ -1,3 +1,4 @@
+import inspect
 from .base import Bot
 
 class KAI(Bot):
@@ -8,7 +9,7 @@ class KAI(Bot):
         super().__init__(config)
         self.name = config.name
 
-    def response(self, message):
+    async def response(self, message):
         """
         How KAI response to message
         """
@@ -22,7 +23,11 @@ class KAI(Bot):
                     if trigger != '':
                         # Special calls
                         command = message.content.split(trigger)[-1].lstrip().rstrip() # Get and clean command
-                        response, reply = api_object.do_command(command)    # Execute command
+                        
+                        if inspect.iscoroutinefunction(api_object.do_command):
+                            response, reply = await api_object.do_command(command)
+                        else:
+                            response, reply = api_object.do_command(command)    # Execute command
                     else:
                         # Normal message, use dictionay to check
                         command = message.content

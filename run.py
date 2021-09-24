@@ -120,7 +120,6 @@ class MyClient(commands.Bot):
         """
         self.pages = []
         self.voice_counter = 0
-        self.voice_client = None
         self.voice_queue = []
         self.current_song_name = None 
 
@@ -242,7 +241,7 @@ class MyClient(commands.Bot):
         voice_state = self.ctx.message.author.voice 
 
         # Process message and get response 
-        response, reply = self.bot.response(message)
+        response, reply = await self.bot.response(message)
 
         # Voice on/off
         if message.content.startswith('$voice'):
@@ -264,17 +263,24 @@ class MyClient(commands.Bot):
             else:
                 await self.on_response(response, message, voice_state, reply)
 
+        """
+        Process music commands. Will refactor this soon
+        """
+
         if message.content.startswith('$pause') or message.content.startswith('$stop'):
             if not self.voice_client.is_paused():
                 self.voice_client.pause()
                 await message.add_reaction('💗')
+
         if message.content.startswith('$resume') or message.content.startswith('$continue'):
             if self.voice_client.is_paused():
                 self.voice_client.resume()
                 await message.add_reaction('💗')
+
         if message.content.startswith('$next'):
             self.voice_client.stop()
             await message.add_reaction('💗')
+
         if message.content.startswith('$skip'):
             num_songs = message.content.split('$skip')[-1].lstrip().rstrip()
             if num_songs == '':
@@ -287,12 +293,12 @@ class MyClient(commands.Bot):
                 await message.add_reaction('💗')
             except:
                 pass
+
         if message.content.startswith('$clear'):
             while len(self.voice_queue) > 0:
                 self.voice_queue.pop(0)
             self.voice_client.stop()
             await message.add_reaction('💗')
-
         
         if message.content.startswith('$remove'):
             ith_song = message.content.split('$remove')[-1].lstrip().rstrip()
@@ -319,7 +325,6 @@ class MyClient(commands.Bot):
             
             result_string = split_text_into_paragraphs(result_string, size=5)
             
-            # embed = makeEmbed(result_string, 'Music :musical_note:', field_name='Queue', colour=discord.Colour.blue())
             pages = Pages(
                 result_string,
                 title='Music :musical_note:',
@@ -331,15 +336,11 @@ class MyClient(commands.Bot):
             if self.prev_message is not None:
                 await self.prev_message.delete()
                 self.prev_message = None
-            # await message.channel.send(embed=embed)
             await self.on_page_response(message.channel, pages)
 
         if message.content.startswith('$shuffle'):
             await message.add_reaction('💗')
             random.shuffle(self.voice_queue)
-
-
-            
 
 
 # Create new processes to keep server online
@@ -352,10 +353,6 @@ TOKEN = os.getenv('TOKEN')
 client = MyClient(
     command_prefix='$', 
     intents=discord.Intents.default())
-
-# Together API must be called here
-together_api = DicordTogetherAPI(client)
-client.bot.apis.append(together_api)
 
 # Start client
 client.run(TOKEN)

@@ -20,17 +20,15 @@ class DicordTogetherAPI(API):
     def set_voice_channel(self, channel_id):
         self.voice_channel_id = channel_id
 
-    def get_link(self, activity):
+    async def get_link(self, activity):
         """
         Get invite link
         """
 
-        loop = asyncio.get_event_loop()
-        link = loop.create_task(self.togetherControl.create_link(self.voice_channel_id, activity))
-        
+        link = await self.togetherControl.create_link(self.voice_channel_id, activity)
         return link
 
-    def do_command(self, command):
+    async def do_command(self, command):
         """
         Create Discord activity link and embed it
         """
@@ -40,11 +38,12 @@ class DicordTogetherAPI(API):
 
         if command.startswith('setid'):
             channel_id = command.split('setid')[-1].lstrip().rstrip()
+            response = "Voice channel ID is set successfully"
             self.set_voice_channel(channel_id)
         elif command.startswith('help'):
             response = "Only supports youtube, poker, betrayal, fishing, chess"
         elif command in ACTIVITIES:
-            link = self.get_link(command)
+            link = await self.get_link(command)
             response = makeEmbed(
                 text= f"Click the blue link to start activity!\n{link}",
                 title= f"Activity 👨‍👩‍👦",
