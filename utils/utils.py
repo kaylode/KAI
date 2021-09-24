@@ -26,4 +26,4 @@ def convertPCM2WAV(
         wavfile.writeframes(pcmdata)
 
 def is_emoji(s):
-    return s in UNICODE_EMOJI
+    return s in UNICODE_EMOJI['en']
