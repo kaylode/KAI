@@ -2,6 +2,8 @@ import asyncio
 import discord
 import youtube_dl
 import random
+from utils.utils import split_text_into_paragraphs
+from utils.pages import Pages
 
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
@@ -112,12 +114,14 @@ class MusicAPI():
                 except:
                     pass
 
+            # Example call: $clear
             if trigger.startswith('$clear'):
                 while len(self.client.voice_queue) > 0:
                     self.client.voice_queue.pop(0)
                 self.client.voice_client.stop()
                 response = '💗'
 
+            # Example call: $remove 5
             if trigger.startswith('$remove'):
                 ith_song = command
                 try:
@@ -126,10 +130,38 @@ class MusicAPI():
                     response = '💗'
                 except:
                     pass
-
+            
+            # Example call: $shuffle
             if trigger.startswith('$shuffle'):
                 random.shuffle(self.client.voice_queue)
                 response = '💗'
+
+            # Example call: $queue
+            if trigger.startswith('$queue'):
+                
+                result_string = []
+                if self.client.current_song_name is not None:
+                    result_string.append(f"0. {self.client.current_song_name}")
+                for i, song in enumerate(self.client.voice_queue):
+                    result_string.append(f"{i+1}. {song.title}")
+                    if i == 5:
+                        break
+                if len(result_string) == 0:
+                    result_string = "Queue is empty"
+                else:
+                    result_string = '\n'.join(result_string)
+                
+                result_string = split_text_into_paragraphs(result_string, size=5)
+                
+                pages = Pages(
+                    result_string,
+                    title='Music :musical_note:',
+                    field_name='Queue',
+                    colour=discord.Colour.blue(),
+                    reactions=["◀️", "▶️"]
+                )
+                
+                response = ['💗', pages]
                 
         return response, False
 

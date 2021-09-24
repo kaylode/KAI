@@ -266,42 +266,6 @@ class MyClient(commands.Bot):
             else:
                 await self.on_response(response, message, voice_state, reply)
 
-        """
-        Process music commands. Will refactor this soon
-        """
-
-        if message.content.startswith('$queue'):
-            await message.add_reaction('💗')
-            result_string = []
-            if self.current_song_name is not None:
-                result_string.append(f"0. {self.current_song_name}")
-            for i, song in enumerate(self.voice_queue):
-                result_string.append(f"{i+1}. {song.title}")
-                if i == 5:
-                    break
-            if len(result_string) == 0:
-                result_string = "Queue is empty"
-            else:
-                result_string = '\n'.join(result_string)
-            
-            result_string = split_text_into_paragraphs(result_string, size=5)
-            
-            pages = Pages(
-                result_string,
-                title='Music :musical_note:',
-                field_name='Queue',
-                colour=discord.Colour.blue(),
-                reactions=["◀️", "▶️"]
-            )
-            
-            if self.prev_message is not None:
-                await self.prev_message.delete()
-                self.prev_message = None
-            await self.on_page_response(message.channel, pages)
-
-        
-
-
 # Create new processes to keep server online
 keep_alive()
 
