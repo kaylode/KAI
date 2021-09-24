@@ -7,14 +7,13 @@ class Bot:
     def __init__(self, config, client) -> None:
         self.config = config
         self.apis = []
-        self.client = client
 
         # Init all apis instances
-        self.init_features()
+        self.init_features(client)
 
-    def init_features(self):
+    def init_features(self, client):
         for api_name in self.config.apis:
-            api_instance = get_api(api_name, self.client)
+            api_instance = get_api(api_name, client)
             self.apis.append(api_instance)
 
     def reponse(self, message):
