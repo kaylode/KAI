@@ -85,9 +85,15 @@ class MyClient(commands.Bot):
                     self.voice_counter = 0
                 else:
                     self.voice_counter += 10
+                    if self.voice_counter > 300:
+                        await self.leave_voice_channel_on_timeout()
             else:
                 self.current_song_name = None 
                 self.voice_counter += 10
+
+                if self.voice_counter > 300:
+                    await self.leave_voice_channel_on_timeout()
+                    
 
     @audio_async.before_loop
     @time_check_async.before_loop
@@ -107,6 +113,31 @@ class MyClient(commands.Bot):
             if voice is None:
                 await voice_channel.connect()
                 self.voice_client = self.ctx.voice_client
+
+    async def leave_voice_channel(self):
+        """
+        Leave channel on timeout
+        """
+        self.pages = []
+        self.voice_counter = 0
+        self.voice_client = None
+        self.voice_queue = []
+        self.current_song_name = None 
+
+        if self.audio_async.is_running():
+            self.audio_async.stop()
+
+        if self.voice_client is not None:
+            await self.voice_client.disconnect()
+            self.voice_client = None
+
+    async def leave_voice_channel_on_timeout(self):
+        """
+        Leave channel on timeout
+        """
+        await self.leave_voice_channel()
+        embed = makeEmbed("Disconnected due to inactivity over 5 minutes", field_name='Disconnected', colour=discord.Colour.red())
+        self.prev_message = await self.on_embed_response(self.ctx.channel, embed)
 
     async def on_string_response(self, channel, response, reply=False, voice_state=None):
         """
@@ -232,20 +263,6 @@ class MyClient(commands.Bot):
                     await self.on_response(r, message, voice_state, reply)
             else:
                 await self.on_response(response, message, voice_state, reply)
-
-
-        if self.voice_counter > 300: 
-            self.voice_counter = 0
-            self.pages = []
-            if self.audio_async.is_running():
-                self.audio_async.stop()
-            await self.voice_client.disconnect()
-            self.voice_client = None
-
-            embed = makeEmbed("Disconnected due to inactivity over 5 minutes", field_name='Disconnected', colour=discord.Colour.red())
-            if self.prev_message is not None:
-                await self.prev_message.delete()
-            self.prev_message = await message.channel.send(embed=embed)
 
         if message.content.startswith('$pause') or message.content.startswith('$stop'):
             if not self.voice_client.is_paused():
