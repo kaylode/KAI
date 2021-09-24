@@ -60,7 +60,7 @@ class LyricsAPI(API):
 
         self.reactions = ["◀️", "▶️"]
 
-    def do_command(self, command):
+    def do_command(self, command, trigger):
         """
         Get lyrics of the song
         """

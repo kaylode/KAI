@@ -16,7 +16,7 @@ class FoodAPI(API):
         self.triggers = ["$food"]
         self.url = ""
 
-    def do_command(self, command):
+    def do_command(self, command, trigger):
         """
         Execute command
         """

@@ -19,7 +19,7 @@ class GoogleTranslationAPI(API):
         self.triggers = ["$translate"]
         self.translator = Translator()
 
-    def do_command(self, command):
+    def do_command(self, command, trigger):
         """
         Execute command
         """

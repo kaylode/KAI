@@ -63,7 +63,7 @@ class OpenAIAPI(API):
         self.current_prompt[self.type] = self.current_prompt[self.type] + response
         return response
 
-    def do_command(self, command):
+    def do_command(self, command, trigger):
         """
         Execute command
         """

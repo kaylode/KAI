@@ -12,7 +12,7 @@ from discord.ext import commands, tasks
 from server import keep_alive
 from bot import KAI
 from configs import get_config
-from apis import GoogleVoiceAPI, Alarm, DicordTogetherAPI, together
+from apis import GoogleVoiceAPI, Alarm, DicordTogetherAPI, MusicAPI
 from utils.utils import makeEmbed, split_text_into_paragraphs
 from utils.pages import Pages
 
@@ -267,10 +267,10 @@ class MyClient(commands.Bot):
         Process music commands. Will refactor this soon
         """
 
-        if message.content.startswith('$pause') or message.content.startswith('$stop'):
-            if not self.voice_client.is_paused():
-                self.voice_client.pause()
-                await message.add_reaction('💗')
+        # if message.content.startswith('$pause') or message.content.startswith('$stop'):
+        #     if not self.voice_client.is_paused():
+        #         self.voice_client.pause()
+        #         await message.add_reaction('💗')
 
         if message.content.startswith('$resume') or message.content.startswith('$continue'):
             if self.voice_client.is_paused():
@@ -353,6 +353,14 @@ TOKEN = os.getenv('TOKEN')
 client = MyClient(
     command_prefix='$', 
     intents=discord.Intents.default())
+
+# Together API must be called here
+together_api = DicordTogetherAPI(client)
+client.bot.apis.append(together_api)
+
+# Together API must be called here
+music_api = MusicAPI(client)
+client.bot.apis.append(music_api)
 
 # Start client
 client.run(TOKEN)

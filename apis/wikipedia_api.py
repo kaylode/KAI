@@ -12,7 +12,7 @@ class WikipediaAPI(API):
         super().__init__()
         self.triggers = ["$wiki"]
 
-    def do_command(self, command):
+    def do_command(self, command, trigger):
         """
         Execute command
         """

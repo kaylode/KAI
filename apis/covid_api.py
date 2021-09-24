@@ -32,7 +32,7 @@ class CovidAPI(API):
         self.url = "https://api.covid19api.com/"
         # 'https://api.covid19api.com/country/vietnam/status/{confirmed, recovered, deaths}'
 
-    def do_command(self, command):
+    def do_command(self, command, trigger):
         """
         Execute command
         """

@@ -38,7 +38,7 @@ class Helper:
     def __init__(self) -> None:
         self.triggers = ["$help"]
 
-    def do_command(self, command):
+    def do_command(self, command, trigger):
         """
         Execute command
         """

@@ -55,19 +55,32 @@ class MusicAPI():
     Play music from youtube
     https://github.com/Rapptz/discord.py/blob/master/examples/basic_voice.py
     """
-    def __init__(self) -> None:
-        self.triggers = ["$play"]
+    def __init__(self, client) -> None:
+        self.triggers = [
+            "$play", 
+            "$resume", "$continue",
+            "$pause", "$stop",
+            "$skip", '$next',
+            "$queue", "$clear",
+            "$shuffle", "$remove"]
 
-    def do_command(self, command):
+        self.client = client
+
+    async def do_command(self, command, trigger):
         """
         Play music
         """
 
         # Example call: $play Despacito
 
-        url = command.split('play')[-1].lstrip().rstrip()
-        response = self.play_from_url(url)
-
+        if trigger.startswith('play'):
+            url = command.lstrip().rstrip()
+            response = self.play_from_url(url)
+        
+        if trigger.startswith('$pause') or trigger.startswith('$stop'):
+            if not self.client.voice_client.is_paused():
+                self.client.voice_client.pause()
+                
         return response, False
 
     @staticmethod

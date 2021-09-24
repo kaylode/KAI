@@ -16,7 +16,7 @@ class KaylodeAPI(API):
         self.triggers = ["$ai"]
         self.url = ""
 
-    def do_command(self, command):
+    def do_command(self, command, trigger):
         """
         Execute command
         """

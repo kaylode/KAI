@@ -52,7 +52,7 @@ class GoogleVoiceAPI(API):
 
         return response
 
-    def do_command(self, command):
+    def do_command(self, command, trigger):
         """
         Execute command
         """

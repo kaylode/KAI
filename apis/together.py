@@ -28,7 +28,7 @@ class DicordTogetherAPI(API):
         link = await self.togetherControl.create_link(self.voice_channel_id, activity)
         return link
 
-    async def do_command(self, command):
+    async def do_command(self, command, trigger):
         """
         Create Discord activity link and embed it
         """
@@ -45,7 +45,7 @@ class DicordTogetherAPI(API):
         elif command in ACTIVITIES:
             link = await self.get_link(command)
             response = makeEmbed(
-                text= f"Click the blue link to start activity!\n{link}",
+                text= f"Click the blue link to start activity!\n[Invite link]({link})",
                 title= f"Activity 👨‍👩‍👦",
                 field_name=f"{command.capitalize()}",
                 colour=discord.Colour.magenta())

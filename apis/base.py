@@ -4,7 +4,7 @@ class API:
     def __init__(self) -> None:
         self.triggers = ["$"]
 
-    def do_command(self, command):
+    def do_command(self, command, trigger):
         pass
 
     def send_request(self, url, data, type, headers=None, **kwargs):

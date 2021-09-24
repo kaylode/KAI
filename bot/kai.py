@@ -25,9 +25,9 @@ class KAI(Bot):
                         command = message.content.split(trigger)[-1].lstrip().rstrip() # Get and clean command
                         
                         if inspect.iscoroutinefunction(api_object.do_command):
-                            response, reply = await api_object.do_command(command)
+                            response, reply = await api_object.do_command(command, trigger)
                         else:
-                            response, reply = api_object.do_command(command)    # Execute command
+                            response, reply = api_object.do_command(command, trigger)    # Execute command
                     else:
                         # Normal message, use dictionay to check
                         command = message.content
