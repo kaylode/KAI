@@ -13,7 +13,7 @@ from server import keep_alive
 from bot import KAI
 from configs import get_config
 from apis import GoogleVoiceAPI, Alarm, DicordTogetherAPI, MusicAPI
-from utils.utils import makeEmbed, split_text_into_paragraphs
+from utils.utils import makeEmbed, split_text_into_paragraphs, is_emoji
 from utils.pages import Pages
 
 TEST_CHANNEL_ID = 865577241048383492
@@ -135,7 +135,7 @@ class MyClient(commands.Bot):
         Leave channel on timeout
         """
         await self.leave_voice_channel()
-        embed = makeEmbed("Disconnected due to inactivity over 5 minutes", field_name='Disconnected', colour=discord.Colour.red())
+        embed = makeEmbed("Disconnected due to inactivity over 5 minutes", title="Disconnected", field_name='', colour=discord.Colour.red())
         self.prev_message = await self.on_embed_response(self.ctx.channel, embed)
 
     async def on_string_response(self, channel, response, reply=False, voice_state=None):
@@ -217,6 +217,10 @@ class MyClient(commands.Bot):
 
         if isinstance(response, Pages):
             await self.on_page_response(message.channel, response)
+
+        if is_emoji(response):
+            await message.add_reaction(response)
+
 
     async def on_reaction_add(self, reaction, user):
         """
@@ -358,7 +362,7 @@ client = MyClient(
 together_api = DicordTogetherAPI(client)
 client.bot.apis.append(together_api)
 
-# Together API must be called here
+# Music API must be called here
 music_api = MusicAPI(client)
 client.bot.apis.append(music_api)
 

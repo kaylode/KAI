@@ -1,5 +1,6 @@
 import discord
 import wave
+from emoji import UNICODE_EMOJI
 
 def split_text_into_paragraphs(text, size=20):
     lines = text.split('\n')
@@ -23,3 +24,6 @@ def convertPCM2WAV(
     with wave.open(outpath, 'wb') as wavfile:
         wavfile.setparams((2, 2, 44100, 0, 'NONE', 'NONE'))
         wavfile.writeframes(pcmdata)
+
+def is_emoji(s):
+    return s in UNICODE_EMOJI

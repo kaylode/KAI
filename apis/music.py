@@ -71,15 +71,18 @@ class MusicAPI():
         Play music
         """
 
-        # Example call: $play Despacito
+        response = None
 
-        if trigger.startswith('play'):
+        # Example call: $play Despacito
+        if trigger.startswith('$play'):
             url = command.lstrip().rstrip()
             response = self.play_from_url(url)
         
+        # Example call: $pause | $stop
         if trigger.startswith('$pause') or trigger.startswith('$stop'):
             if not self.client.voice_client.is_paused():
                 self.client.voice_client.pause()
+                response = '💗'
                 
         return response, False
 
