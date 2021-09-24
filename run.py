@@ -13,7 +13,7 @@ from server import keep_alive
 from bot import KAI
 from configs import get_config
 from apis import GoogleVoiceAPI, Alarm, DicordTogetherAPI, MusicAPI
-from utils.utils import makeEmbed, split_text_into_paragraphs, is_emoji
+from utils.utils import makeEmbed, is_emoji
 from utils.pages import Pages
 
 TEST_CHANNEL_ID = 865577241048383492
