@@ -12,7 +12,7 @@ from discord.ext import commands, tasks
 from server import keep_alive
 from bot import KAI
 from configs import get_config
-from apis import GoogleVoiceAPI, Alarm, DicordTogetherAPI, MusicAPI
+from apis import GoogleVoiceAPI, Alarm
 from utils.utils import makeEmbed, is_emoji
 from utils.pages import Pages
 
@@ -135,7 +135,7 @@ class MyClient(commands.Bot):
         Leave channel on timeout
         """
         await self.leave_voice_channel()
-        embed = makeEmbed("Disconnected due to inactivity over 5 minutes", title="Disconnected", field_name='', colour=discord.Colour.red())
+        embed = makeEmbed("Disconnected due to inactivity over 5 minutes", title="Disconnected", field_name='Timeout', colour=discord.Colour.red())
         self.prev_message = await self.on_embed_response(self.ctx.channel, embed)
 
     async def on_string_response(self, channel, response, reply=False, voice_state=None):
@@ -276,14 +276,6 @@ TOKEN = os.getenv('TOKEN')
 client = MyClient(
     command_prefix='$', 
     intents=discord.Intents.default())
-
-# # Together API must be called here
-# together_api = DicordTogetherAPI(client)
-# client.bot.apis.append(together_api)
-
-# # Music API must be called here
-# music_api = MusicAPI(client)
-# client.bot.apis.append(music_api)
 
 # Start client
 client.run(TOKEN)
