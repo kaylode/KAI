@@ -206,8 +206,11 @@ class MyClient(commands.Bot):
         if isinstance(response, discord.PCMVolumeTransformer):
             await self.on_voice_response(response, voice_state, message.channel)
             await message.add_reaction('💗')
-            
-        if isinstance(response, str):
+        
+        if is_emoji(response):
+            await message.add_reaction(response)
+
+        elif isinstance(response, str):
             await self.on_string_response(message.channel, response, reply, voice_state)
 
         if isinstance(response, discord.Embed):
@@ -217,10 +220,6 @@ class MyClient(commands.Bot):
 
         if isinstance(response, Pages):
             await self.on_page_response(message.channel, response)
-
-        if is_emoji(response):
-            await message.add_reaction(response)
-
 
     async def on_reaction_add(self, reaction, user):
         """
@@ -271,48 +270,6 @@ class MyClient(commands.Bot):
         Process music commands. Will refactor this soon
         """
 
-        # if message.content.startswith('$pause') or message.content.startswith('$stop'):
-        #     if not self.voice_client.is_paused():
-        #         self.voice_client.pause()
-        #         await message.add_reaction('💗')
-
-        if message.content.startswith('$resume') or message.content.startswith('$continue'):
-            if self.voice_client.is_paused():
-                self.voice_client.resume()
-                await message.add_reaction('💗')
-
-        if message.content.startswith('$next'):
-            self.voice_client.stop()
-            await message.add_reaction('💗')
-
-        if message.content.startswith('$skip'):
-            num_songs = message.content.split('$skip')[-1].lstrip().rstrip()
-            if num_songs == '':
-                num_songs = 1
-            try:
-                num_songs = int(num_songs)
-                for i in range(num_songs-1):
-                    self.voice_queue.pop(0)
-                self.voice_client.stop()
-                await message.add_reaction('💗')
-            except:
-                pass
-
-        if message.content.startswith('$clear'):
-            while len(self.voice_queue) > 0:
-                self.voice_queue.pop(0)
-            self.voice_client.stop()
-            await message.add_reaction('💗')
-        
-        if message.content.startswith('$remove'):
-            ith_song = message.content.split('$remove')[-1].lstrip().rstrip()
-            try:
-                ith_song = int(ith_song)
-                self.voice_queue.pop(ith_song-1)
-                await message.add_reaction('💗')
-            except:
-                pass
-
         if message.content.startswith('$queue'):
             await message.add_reaction('💗')
             result_string = []
@@ -342,9 +299,7 @@ class MyClient(commands.Bot):
                 self.prev_message = None
             await self.on_page_response(message.channel, pages)
 
-        if message.content.startswith('$shuffle'):
-            await message.add_reaction('💗')
-            random.shuffle(self.voice_queue)
+        
 
 
 # Create new processes to keep server online

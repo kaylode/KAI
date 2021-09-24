@@ -1,6 +1,7 @@
 import asyncio
 import discord
 import youtube_dl
+import random
 
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
@@ -78,10 +79,56 @@ class MusicAPI():
             url = command.lstrip().rstrip()
             response = self.play_from_url(url)
         
-        # Example call: $pause | $stop
-        if trigger.startswith('$pause') or trigger.startswith('$stop'):
-            if not self.client.voice_client.is_paused():
-                self.client.voice_client.pause()
+        if self.client.voice_client is not None:
+
+            # Example call: $pause | $stop
+            if trigger.startswith('$pause') or trigger.startswith('$stop'):
+                if not self.client.voice_client.is_paused():
+                    self.client.voice_client.pause()
+                    response = '💗'
+
+            # Example call: $resume | $continue
+            if trigger.startswith('$resume') or trigger.startswith('$continue'):
+                if self.client.voice_client.is_paused():
+                    self.client.voice_client.resume()
+                    response = '💗'
+
+            # Example call: $next
+            if trigger.startswith('$next'):
+                self.client.voice_client.stop()
+                response = '💗'
+
+            # Example call: $skip 5
+            if trigger.startswith('$skip'):
+                num_songs = command
+                if num_songs == '':
+                    num_songs = 1
+                try:
+                    num_songs = int(num_songs)
+                    for i in range(num_songs-1):
+                        self.client.voice_queue.pop(0)
+                    self.client.voice_client.stop()
+                    response = '💗'
+                except:
+                    pass
+
+            if trigger.startswith('$clear'):
+                while len(self.client.voice_queue) > 0:
+                    self.client.voice_queue.pop(0)
+                self.client.voice_client.stop()
+                response = '💗'
+
+            if trigger.startswith('$remove'):
+                ith_song = command
+                try:
+                    ith_song = int(ith_song)
+                    self.client.voice_queue.pop(ith_song-1)
+                    response = '💗'
+                except:
+                    pass
+
+            if trigger.startswith('$shuffle'):
+                random.shuffle(self.client.voice_queue)
                 response = '💗'
                 
         return response, False
