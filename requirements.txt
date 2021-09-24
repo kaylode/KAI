@@ -9,3 +9,4 @@ opuslib==3.0.1
 wikipedia
 SpeechRecognition
 lyrics-extractor
+discord-together

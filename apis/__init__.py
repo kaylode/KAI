@@ -11,6 +11,9 @@ from .music import MusicAPI
 from .wikipedia_api import WikipediaAPI
 from .speech import SpeechToTextAPI
 from .lyrics import LyricsAPI
+from .together import DicordTogetherAPI
+
+from run import client
 
 def get_api(name):
     if name == 'dictionary':
@@ -35,6 +38,8 @@ def get_api(name):
         return WikipediaAPI()
     if name == 'lyricsapi':
         return LyricsAPI()
+    if name == 'together':
+        return DicordTogetherAPI(client)
         
     print("[Error] Wrong features name. Check .yaml file")
     raise

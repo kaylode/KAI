@@ -2,7 +2,7 @@ import requests
 
 class API:
     def __init__(self) -> None:
-        self.trigger = "$"
+        self.triggers = ["$"]
 
     def do_command(self, command):
         pass
