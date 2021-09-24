@@ -1,4 +1,5 @@
-# K.A.I - an artificial intelligence Discord Bot
+# <p align="center"> K.A.I - an artificial intelligence Discord Bot <br> (supports Vietnamese/English) </p>
+
 
 <p align="center">
  <a><img height=300px src="./avatar/kai.jpg"></a>
@@ -18,15 +19,15 @@ Being inspired by Marvel's Ultron/Jarvis, K.A.I is created as a Discord bot writ
 <a name="myfootnote1"><strong><i>[*]</i></strong></a>: **_With help of GPT-3 technology._**
 
 ## What can K.A.I do ?
-- Customable Alarm
-- Wiki search
-- Stream music from Youtube
+- [Customable Alarm](https://github.com/kaylode/KAI/wiki/Features:-Customable-Alarm)
+- [Wiki search](https://github.com/kaylode/KAI/wiki/Features:-Wiki-search)
+- [Stream music from Youtube](https://github.com/kaylode/KAI/wiki/Features:-Stream-Youtube)
 - Covid 19 information
-- Voice control (English/Vietnamese) <sup>[**](#myfootnote1)</sup>
-- Basic Computer Vision Model API
-- OpenAI GPT-3 Chatbot
-- Google Translate
-- Google Text-to-speech 
+- [Voice control (English/Vietnamese)](https://github.com/kaylode/KAI/wiki/Features:-Voice-control) <sup>[**](#myfootnote1)</sup>
+- [Basic Computer Vision Model API](https://github.com/kaylode/KAI/wiki/Features:-Computer-Vision)
+- [OpenAI GPT-3 Chatbot](https://github.com/kaylode/KAI/wiki/Featues:-Chatbot)
+- [Google Translate](https://github.com/kaylode/KAI/wiki/Features:-Google-Translate)
+- [Google Text-to-speech](https://github.com/kaylode/KAI/wiki/Features:-Text-to-Speech) 
 
 <a name="myfootnote1"><strong><i>[**]</i></strong></a>: **_Because discord.py does not support recording voice yet. I use another bot written in Javascript to perform speech-to-text._**
 
@@ -40,3 +41,11 @@ Being inspired by Marvel's Ultron/Jarvis, K.A.I is created as a Discord bot writ
 - [Discord Markdown](https://gist.github.com/matthewzring/9f7bbfd102003963f9be7dbcf7d40e51)
 - [Starter Tutorial](https://www.freecodecamp.org/news/create-a-discord-bot-with-python/)
 - [Voice recognition](https://github.com/Rei-x/discord-speech-recognition)
+
+## Contact
+
+<p align="center">
+ <a href="https://discordapp.com/users/326944513396441089"><img height=40px src="https://seeklogo.com/images/D/discord-color-logo-E5E6DFEF80-seeklogo.com.png"></a>
+</p>
+
+
