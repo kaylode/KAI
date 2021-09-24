@@ -30,8 +30,6 @@ def get_api(name, client):
         return CovidAPI()
     if name == 'openai':
         return OpenAIAPI()
-    if name == 'music':
-        return MusicAPI()
     if name == 'wikipedia':
         return WikipediaAPI()
     if name == 'lyricsapi':
