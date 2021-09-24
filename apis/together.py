@@ -26,7 +26,7 @@ class DicordTogetherAPI(API):
         """
 
         loop = asyncio.get_event_loop()
-        link = loop.run_until_complete(self.togetherControl.create_link(self.voice_channel_id, activity))
+        link = loop.create_task(self.togetherControl.create_link(self.voice_channel_id, activity))
         
         return link
 
@@ -38,16 +38,18 @@ class DicordTogetherAPI(API):
         response = None
         reply = False
 
-        if command in ACTIVITIES:
-            if command == 'help':
-                response = "Only supports youtube, poker, betrayal, fishing, chess"
-            else:
-                link = self.get_link(command)
-                response = makeEmbed(
-                    text= f"Click the blue link to start activity!\n{link}",
-                    title= f"Activity 👨‍👩‍👦",
-                    field_name=f"{command.capitalize()}",
-                    colour=discord.Colour.yellow())
+        if command.startswith('setid'):
+            channel_id = command.split('setid')[-1].lstrip().rstrip()
+            self.set_voice_channel(channel_id)
+        elif command.startswith('help'):
+            response = "Only supports youtube, poker, betrayal, fishing, chess"
+        elif command in ACTIVITIES:
+            link = self.get_link(command)
+            response = makeEmbed(
+                text= f"Click the blue link to start activity!\n{link}",
+                title= f"Activity 👨‍👩‍👦",
+                field_name=f"{command.capitalize()}",
+                colour=discord.Colour.magenta())
         else:
             response = "Activity is not available. Use $together help"
 

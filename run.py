@@ -12,7 +12,7 @@ from discord.ext import commands, tasks
 from server import keep_alive
 from bot import KAI
 from configs import get_config
-from apis import GoogleVoiceAPI, Alarm
+from apis import GoogleVoiceAPI, Alarm, DicordTogetherAPI, together
 from utils.utils import makeEmbed, split_text_into_paragraphs
 from utils.pages import Pages
 
@@ -335,6 +335,10 @@ TOKEN = os.getenv('TOKEN')
 client = MyClient(
     command_prefix='$', 
     intents=discord.Intents.default())
+
+# Together API must be called here
+together_api = DicordTogetherAPI(client)
+client.bot.apis.append(together_api)
 
 # Start client
 client.run(TOKEN)
