@@ -5,8 +5,8 @@ class KAI(Bot):
     """
     Source code of KAI 
     """
-    def __init__(self, config) -> None:
-        super().__init__(config)
+    def __init__(self, config, client) -> None:
+        super().__init__(config, client)
         self.name = config.name
 
     async def response(self, message):

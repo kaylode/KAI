@@ -29,7 +29,7 @@ class MyClient(commands.Bot):
 
         # KAI initilization
         self.config = get_config("KAI")
-        self.bot = KAI(self.config)
+        self.bot = KAI(self.config, client=self)
         self.ctx = None
         self.voice_on = False
 
@@ -277,13 +277,13 @@ client = MyClient(
     command_prefix='$', 
     intents=discord.Intents.default())
 
-# Together API must be called here
-together_api = DicordTogetherAPI(client)
-client.bot.apis.append(together_api)
+# # Together API must be called here
+# together_api = DicordTogetherAPI(client)
+# client.bot.apis.append(together_api)
 
-# Music API must be called here
-music_api = MusicAPI(client)
-client.bot.apis.append(music_api)
+# # Music API must be called here
+# music_api = MusicAPI(client)
+# client.bot.apis.append(music_api)
 
 # Start client
 client.run(TOKEN)

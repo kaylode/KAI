@@ -13,7 +13,7 @@ from .speech import SpeechToTextAPI
 from .lyrics import LyricsAPI
 from .together import DicordTogetherAPI
 
-def get_api(name):
+def get_api(name, client):
     if name == 'dictionary':
         return Dictionary()
     if name == 'foodapi':
@@ -36,6 +36,10 @@ def get_api(name):
         return WikipediaAPI()
     if name == 'lyricsapi':
         return LyricsAPI()
+    if name == 'together':
+        return DicordTogetherAPI(client)
+    if name == 'music':
+        return MusicAPI(client)
         
     print("[Error] Wrong features name. Check .yaml file")
     raise
