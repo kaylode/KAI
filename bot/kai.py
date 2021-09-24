@@ -24,6 +24,7 @@ class KAI(Bot):
                         # Special calls
                         command = message.content.split(trigger)[-1].lstrip().rstrip() # Get and clean command
                         
+                        # Check if is async def function
                         if inspect.iscoroutinefunction(api_object.do_command):
                             response, reply = await api_object.do_command(command, trigger)
                         else:
