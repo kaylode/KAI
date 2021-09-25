@@ -60,7 +60,7 @@ class MusicAPI():
     """
     def __init__(self, client) -> None:
         self.triggers = [
-            "$play", 
+            "$play", "$volume",
             "$resume", "$continue",
             "$pause", "$stop",
             "$skip", '$next',
@@ -164,6 +164,30 @@ class MusicAPI():
                 )
                 
                 response = ['💗', pages]
+
+
+            # Example call: $volume 50
+            if trigger.startswith('$volume'):
+                # voice = get(client.voice_clients, guild=ctx.guild)  
+                if command.isnumeric():
+                    volume = int(command)
+                    if 0 <= volume <= 100:                              
+                        if self.client.voice_client.is_playing():                          
+                            new_volume = volume / 100                   
+                            self.client.voice_clien.source.volume = new_volume
+                            response = '💗'
+                else:
+                    if command == 'up':
+                        current_volume = self.client.voice_clien.source.volume
+                        new_volume = min(1.0, current_volume+0.2)
+                        self.client.voice_clien.source.volume = new_volume
+                        response = '💗'
+                    if command == 'down':
+                        current_volume = self.client.voice_clien.source.volume
+                        new_volume = max(0.0, current_volume-0.2)
+                        self.client.voice_clien.source.volume = new_volume
+                        response = '💗'
+
                 
         return response, False
 
