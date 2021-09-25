@@ -172,13 +172,6 @@ class MyClient(commands.Bot):
         await self.join_voice_channel(voice_state)
 
         self.voice_queue.append(response)
-        try:
-            response = makeEmbed(response.title, 'Music :musical_note:', 'Queueing', colour=discord.Colour.blue())
-            if self.prev_message is not None:
-                await self.prev_message.delete()
-            self.prev_message = await self.on_embed_response(channel, response)
-        except:
-            pass
         
     async def on_file_response(self, channel, response):
         """
@@ -188,7 +181,7 @@ class MyClient(commands.Bot):
 
     async def on_page_response(self, channel, response):
         """
-        If response is file. Send file
+        If response is page. Send page
         """
         self.pages.append(response)
         message = await response.send_page(channel)

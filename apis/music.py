@@ -2,7 +2,7 @@ import asyncio
 import discord
 import youtube_dl
 import random
-from utils.utils import split_text_into_paragraphs
+from utils.utils import split_text_into_paragraphs, makeEmbed
 from utils.pages import Pages
 
 # Suppress noise about console usage from errors
@@ -79,7 +79,9 @@ class MusicAPI():
         # Example call: $play Despacito
         if trigger.startswith('$play'):
             url = command.lstrip().rstrip()
-            response = self.play_from_url(url)
+            music = self.play_from_url(url)
+            embed = response = makeEmbed(response.title, 'Music :musical_note:', 'Queueing', colour=discord.Colour.blue())
+            response = [music, embed]
         
         if self.client.voice_client is not None:
 
@@ -165,8 +167,7 @@ class MusicAPI():
                 
         return response, False
 
-    @staticmethod
-    def play_from_url(url):
+    def play_from_url(self, url):
         """
         Plays from a url (almost anything youtube_dl supports)
         """
