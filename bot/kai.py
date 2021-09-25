@@ -19,7 +19,8 @@ class KAI(Bot):
         for api_object in self.apis:
             for trigger in api_object.triggers:
                 # If message contains trigger words
-                if message.content.startswith(trigger):
+                tokens = message.content.split(' ')
+                if tokens[0] == trigger:
                     if trigger != '':
                         # Special calls
                         command = message.content.split(trigger)[-1].lstrip().rstrip() # Get and clean command
