@@ -124,6 +124,7 @@ client.on('speech', message => {
             case "queue":
             case "shuffle":   
             case "lyric":
+            case "volume":
               response = "$".concat(response);
               channel.send(response);
               break;
