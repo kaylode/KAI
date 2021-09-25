@@ -78,6 +78,15 @@
         ],
         "trộn danh sách": [
             "shuffle"
+        ],
+        "tăng âm lượng": [
+            "volume up"
+        ],
+        "giảm âm lượng": [
+            "volume down"
+        ],
+        "đặt âm lượng bằng": [
+            "volume"
         ]
   }
 }
