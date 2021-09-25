@@ -1,4 +1,7 @@
-
+import discord
+import json
+from utils.utils import split_text_into_paragraphs, makeEmbed
+from utils.pages import Pages
 
 help_dict = {
     '$help': "\t\t\t\t Print usage guide of commands",
@@ -31,12 +34,32 @@ help_dict = {
     }
 }
 
+with open('./database/db.json', 'r') as f:
+    voice_dict = json.load(f)
+    voice_dict = voice_dict['voice']
+
+
+def stringify_dict(_dict):
+    response = ""
+    for key in _dict.keys():
+        command = command.rstrip().lstrip()
+        if command == key or command == "":
+            response += f"{key}: "
+            details = _dict[key] # Dict or string
+            if isinstance(details, dict):
+                response += "\n"
+                for key2, value in details.items():
+                    response += f"\t{key2}: {value}\n"
+            else:
+                response += f"{details}\n"
+    return response
+
 class Helper:
     """
     Helper class for printing BOT information
     """
     def __init__(self) -> None:
-        self.triggers = ["$help"]
+        self.triggers = ["$help", "$voicehelp"]
 
     def do_command(self, command, trigger):
         """
@@ -44,17 +67,32 @@ class Helper:
         """
         reply = False
 
-        response = ""
-        for key in help_dict.keys():
-            command = command.rstrip().lstrip()
-            if command == key or command == "":
-                response += f"{key}: "
-                details = help_dict[key] # Dict or string
-                if isinstance(details, dict):
-                    response += "\n"
-                    for key2, value in details.items():
-                        response += f"\t{key2}: {value}\n"
-                else:
-                    response += f"{details}\n"
+        if trigger.startswith('$help'):
+            response = stringify_dict(help_dict)
+
+            result_string = split_text_into_paragraphs(response, size=10)
+                    
+            pages = Pages(
+                result_string,
+                title='Helper 💡',
+                field_name='Show all commands',
+                colour=discord.Colour.gold(),
+                reactions=["◀️", "▶️"]
+            )
+        
+        if trigger.startswith('$voicehelp'):
+            response = stringify_dict(voice_dict)
+
+            result_string = split_text_into_paragraphs(response, size=10)
+                    
+            pages = Pages(
+                result_string,
+                title='Voice Helper 💡',
+                field_name='Show all voice commands',
+                colour=discord.Colour.gold(),
+                reactions=["◀️", "▶️"]
+            )
+        
+        response = ['💗', pages]
 
         return response, reply
