@@ -4,33 +4,33 @@ from utils.utils import split_text_into_paragraphs, makeEmbed
 from utils.pages import Pages
 
 help_dict = {
-    '$help': "\t\t\t\t Print usage guide of commands",
-    '$translate': '\t\t\tTranslate text in double quotes. Ex: $translate "hello"',
-    '$speak': '\t\t\t\tSpeak a message. Ex: $speak "hello"',
-    '$voice': '\t\t\t\tWhether to reply using voice. Ex: $voice on',
+    '$help': "Print usage guide of commands",
+    '$translate': 'Translate text in double quotes. Ex: $translate "hello"',
+    '$speak': 'Speak a message. Ex: $speak "hello"',
+    '$voice': 'Whether to reply using voice. Ex: $voice on',
     '$ai': {
-        'url': "\t\t\t\tSet ngrok server API",
-        'detect': "\t\t\tDetect objects from image"
+        'url': "Set ngrok server API",
+        'detect': "Detect objects from image"
     },
     '$food': {
-        'url': "\t\t\t\tSet ngrok server API",
-        'predict': "\t\t\tDetect food from image"
+        'url': "Set ngrok server API",
+        'predict': "Detect food from image"
     },
-    '$gettime': '\t\t\tGet system time',
+    '$gettime': 'Get system time',
     '$covid': {
-        'summary': '\t\t\tGet infomation of COVID in global or specific country. Ex: $covid summary'
+        'summary': 'Get infomation of COVID in global or specific country. Ex: $covid summary'
     },
 
-    '$openai': '\t\t\tChat with OpenAI GPT-3. Ex: $openai "mày tên gì ?"',
+    '$openai': 'Chat with OpenAI GPT-3. Ex: $openai "mày tên gì ?"',
 
     "song": {
-        '$play': '\t\t\tPlay song from Youtube. Ex: $play music',
-        '$pause': '\t\t\tPause song. Ex: $pause',
-        '$resume': '\t\t\Resume song. Ex: $resume',
-        '$skip': '\t\t\tSkip to ith song. Ex: $skip 5',
-        '$next': '\t\t\tSkip to next song. Ex: $next',
-        '$clear': '\t\t\tClear song queue. Ex: $clear',
-        '$queue': '\t\t\tShow song queue. Ex: $queue',
+        '$play': 'Play song from Youtube. Ex: $play music',
+        '$pause': 'Pause song. Ex: $pause',
+        '$resume': '\Resume song. Ex: $resume',
+        '$skip': 'Skip to ith song. Ex: $skip 5',
+        '$next': 'Skip to next song. Ex: $next',
+        '$clear': 'Clear song queue. Ex: $clear',
+        '$queue': 'Show song queue. Ex: $queue',
     }
 }
 
@@ -75,7 +75,7 @@ class Helper:
             pages = Pages(
                 result_string,
                 title='Helper 💡',
-                field_name='Show all commands',
+                field_name='Show all commands [{page_id}' + f'/{len(result_string)}]',
                 colour=discord.Colour.gold(),
                 reactions=["◀️", "▶️"]
             )
@@ -88,11 +88,11 @@ class Helper:
             pages = Pages(
                 result_string,
                 title='Voice Helper 💡',
-                field_name='Show all voice commands',
+                field_name='Show all voice commands [{page_id}' + f'/{len(result_string)}]',
                 colour=discord.Colour.gold(),
                 reactions=["◀️", "▶️"]
             )
-        
+
         response = ['💗', pages]
 
         return response, reply
