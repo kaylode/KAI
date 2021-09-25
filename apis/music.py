@@ -158,7 +158,7 @@ class MusicAPI():
                 pages = Pages(
                     result_string,
                     title='Music :musical_note:',
-                    field_name='Queue',
+                    field_name='Queue [{page_id}' + f'/{len(result_string)}]',
                     colour=discord.Colour.blue(),
                     reactions=["◀️", "▶️"]
                 )
