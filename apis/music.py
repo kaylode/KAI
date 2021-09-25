@@ -80,7 +80,7 @@ class MusicAPI():
         if trigger.startswith('$play'):
             url = command.lstrip().rstrip()
             music = self.play_from_url(url)
-            embed = makeEmbed(response.title, 'Music :musical_note:', 'Queueing', colour=discord.Colour.blue())
+            embed = makeEmbed(music.title, 'Music :musical_note:', 'Queueing', colour=discord.Colour.blue())
             response = [music, embed]
         
         if self.client.voice_client is not None:
@@ -146,8 +146,6 @@ class MusicAPI():
                     result_string.append(f"0. {self.client.current_song_name}")
                 for i, song in enumerate(self.client.voice_queue):
                     result_string.append(f"{i+1}. {song.title}")
-                    if i == 5:
-                        break
                 if len(result_string) == 0:
                     result_string = "Queue is empty"
                 else:
@@ -174,18 +172,18 @@ class MusicAPI():
                     if 0 <= volume <= 100:                              
                         if self.client.voice_client.is_playing():                          
                             new_volume = volume / 100                   
-                            self.client.voice_clien.source.volume = new_volume
+                            self.client.voice_client.source.volume = new_volume
                             response = '💗'
                 else:
                     if command == 'up':
-                        current_volume = self.client.voice_clien.source.volume
+                        current_volume = self.client.voice_client.source.volume
                         new_volume = min(1.0, current_volume+0.2)
-                        self.client.voice_clien.source.volume = new_volume
+                        self.client.voice_client.source.volume = new_volume
                         response = '💗'
                     if command == 'down':
-                        current_volume = self.client.voice_clien.source.volume
+                        current_volume = self.client.voice_client.source.volume
                         new_volume = max(0.0, current_volume-0.2)
-                        self.client.voice_clien.source.volume = new_volume
+                        self.client.voice_client.source.volume = new_volume
                         response = '💗'
 
             # Voice on/off

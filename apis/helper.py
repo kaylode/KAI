@@ -5,7 +5,7 @@ from utils.pages import Pages
 
 help_dict = {
     '$help': "Print usage guide of commands",
-    '$translate': 'Translate text in double quotes. Ex: $translate "hello"',
+    '$translate': 'Translate text. Ex: $translate "hello"',
     '$speak': 'Speak a message. Ex: $speak "hello"',
     '$voice': 'Whether to reply using voice. Ex: $voice on',
     '$ai': {
@@ -26,7 +26,7 @@ help_dict = {
     "song": {
         '$play': 'Play song from Youtube. Ex: $play music',
         '$pause': 'Pause song. Ex: $pause',
-        '$resume': '\Resume song. Ex: $resume',
+        '$resume': 'Resume song. Ex: $resume',
         '$skip': 'Skip to ith song. Ex: $skip 5',
         '$next': 'Skip to next song. Ex: $next',
         '$clear': 'Clear song queue. Ex: $clear',
