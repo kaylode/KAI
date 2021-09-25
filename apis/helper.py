@@ -39,7 +39,7 @@ with open('./database/db.json', 'r') as f:
     voice_dict = voice_dict['voice']
 
 
-def stringify_dict(_dict):
+def stringify_dict(command, _dict):
     response = ""
     for key in _dict.keys():
         command = command.rstrip().lstrip()
@@ -68,7 +68,7 @@ class Helper:
         reply = False
 
         if trigger.startswith('$help'):
-            response = stringify_dict(help_dict)
+            response = stringify_dict(command, help_dict)
 
             result_string = split_text_into_paragraphs(response, size=10)
                     
@@ -81,7 +81,7 @@ class Helper:
             )
         
         if trigger.startswith('$voicehelp'):
-            response = stringify_dict(voice_dict)
+            response = stringify_dict(command, voice_dict)
 
             result_string = split_text_into_paragraphs(response, size=10)
                     

@@ -60,7 +60,7 @@ class MusicAPI():
     """
     def __init__(self, client) -> None:
         self.triggers = [
-            "$play", "$volume",
+            "$play", "$volume", "$voice",
             "$resume", "$continue",
             "$pause", "$stop",
             "$skip", '$next',
@@ -80,7 +80,7 @@ class MusicAPI():
         if trigger.startswith('$play'):
             url = command.lstrip().rstrip()
             music = self.play_from_url(url)
-            embed = response = makeEmbed(response.title, 'Music :musical_note:', 'Queueing', colour=discord.Colour.blue())
+            embed = makeEmbed(response.title, 'Music :musical_note:', 'Queueing', colour=discord.Colour.blue())
             response = [music, embed]
         
         if self.client.voice_client is not None:
@@ -187,6 +187,18 @@ class MusicAPI():
                         new_volume = max(0.0, current_volume-0.2)
                         self.client.voice_clien.source.volume = new_volume
                         response = '💗'
+
+            # Voice on/off
+            if trigger.startswith('$voice'):
+                type = command
+                if type == 'on':
+                    self.client.voice_on = True
+                    embed = makeEmbed('Turn on voice reply', 'Info 🔉', 'Voice reply', colour=discord.Colour.magenta())
+                    response = ['💗', embed]
+                elif type == 'off':
+                    self.client.voice_on = False
+                    embed = makeEmbed('Turn off voice reply', 'Info 🔉', 'Voice reply', colour=discord.Colour.magenta())
+                    response = ['💗', embed]
 
                 
         return response, False

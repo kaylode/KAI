@@ -239,18 +239,6 @@ class MyClient(commands.Bot):
         # Process message and get response 
         response, reply = await self.bot.response(message)
 
-        # Voice on/off
-        if message.content.startswith('$voice'):
-            type = message.content.split('$voice')[-1].lstrip().rstrip()
-            if type == 'on':
-                self.voice_on = True
-                response = '[Info] Voice reply on'
-            elif type == 'off':
-                self.voice_on = False
-                response = '[Info] Voice reply off'
-            else:
-                response = '[Error] Wrong command. Use $voice on/off only'
-
         # Deal with response
         if response is not None:
             if isinstance(response, list):
