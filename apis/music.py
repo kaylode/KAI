@@ -2,7 +2,8 @@ import asyncio
 import discord
 import youtube_dl
 import random
-from utils.utils import split_text_into_paragraphs, makeEmbed
+import time
+from utils.utils import split_text_into_paragraphs, makeEmbed, makeSongEmbed
 from utils.pages import Pages
 
 # Suppress noise about console usage from errors
@@ -40,6 +41,11 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
         self.title = data.get('title')
         self.url = data.get('url')
+        self.thumbnail = data.get('thumbnail')
+        self.duration = time.strftime('%M:%S', time.gmtime(int(data.get('duration'))))
+        self.view_count = '{:,}'.format(int(data.get('view_count')))
+        self.like_count = '{:,}'.format(int(data.get('like_count')))
+        self.dislike_count = '{:,}'.format(int(data.get('dislike_count')))
 
     @classmethod
     def from_url(cls, url, *, loop=None, stream=False):
@@ -80,7 +86,7 @@ class MusicAPI():
         if trigger.startswith('$play'):
             url = command.lstrip().rstrip()
             music = self.play_from_url(url)
-            embed = makeEmbed(music.title, 'Music :musical_note:', 'Queueing', colour=discord.Colour.blue())
+            embed = makeSongEmbed('Queueing', music, colour=discord.Colour.blue())
             response = [music, embed]
         
         if self.client.voice_client is not None:

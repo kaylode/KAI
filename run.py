@@ -13,7 +13,7 @@ from server import keep_alive
 from bot import KAI
 from configs import get_config
 from apis import GoogleVoiceAPI, Alarm
-from utils.utils import makeEmbed, is_emoji
+from utils.utils import makeEmbed, is_emoji, makeSongEmbed
 from utils.pages import Pages
 
 TEST_CHANNEL_ID = 865577241048383492
@@ -75,7 +75,8 @@ class MyClient(commands.Bot):
 
                     try:
                         self.current_song_name = response.title
-                        embed = makeEmbed(response.title, 'Music :musical_note:', 'Now Playing :arrow_forward:', colour=discord.Colour.blue())
+                        embed = makeSongEmbed('Now Playing :arrow_forward:', response, colour=discord.Colour.blue())
+                       
                         if self.prev_message is not None:
                             await self.prev_message.delete()
                         self.prev_message = await self.on_embed_response(self.ctx.channel, embed)

@@ -14,6 +14,17 @@ def makeEmbed(text, title=None, field_name=None, colour=discord.Colour.red()):
     embed.add_field(name=field_name, value=retStr)
     return embed
 
+def makeSongEmbed(field, song, colour=discord.Colour.blue()):
+    embed = discord.Embed(title='Music :musical_note:', colour=colour)
+    embed.add_field(name=field, value=str(f"```html\n{song.title}```"), inline=False)
+    embed.set_thumbnail(url=song.thumbnail)
+    embed.add_field(name="Duration 🕒", value=song.duration, inline=True)
+    embed.add_field(name="View count 👀", value=song.view_count, inline=True)
+    embed.add_field(name='\u200b', value='\u200b')
+    embed.add_field(name="Likes count 👍", value=song.like_count, inline=True)
+    embed.add_field(name="Dislikes count 👎", value=song.dislike_count, inline=True)
+    return embed
+
 def convertPCM2WAV(
     inpath='./.cache/recording.pcm', 
     outpath='./.cache/recording.wav'):
