@@ -7,7 +7,15 @@
   <a style="font-size: 40px; color:red;"> <strong> Hi there, I'm K.A.I </strong> </a>
 </p>
 
-
+<p align="center">
+<a href="https://www.codefactor.io/repository/github/kaylode/kai"><img src="https://www.codefactor.io/repository/github/kaylode/kai/badge" alt="CodeFactor" /></a>
+<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg" alt="Python" /></a>
+<a href="./LICENSE"><img src="https://img.shields.io/github/license/Naereen/StrapDown.js.svg" alt="MIT" /></a>
+<a href="https://https://discord.com/"><img src="https://badgen.net/badge/icon/discord?icon=discord&label" alt="Discord" /></a>
+ 
+ </p>
+ 
+ 
 <details open>
  <summary><strong>Status</strong></summary>
  <strong><i>[22/09/2021]</i></strong> K.A.I is still in optimization stage and not for production purpose. Documentation is on the way. If you want to use for your own server, contact me for guidance. 
