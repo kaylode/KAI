@@ -1,21 +1,23 @@
 import asyncio
 import discord
-import youtube_dl
+import yt_dlp
 import random
 import time
 from utils.utils import split_text_into_paragraphs, makeEmbed, makeSongEmbed
 from utils.pages import Pages
 
 # Suppress noise about console usage from errors
-youtube_dl.utils.bug_reports_message = lambda: ''
+# yt_dlp.utils.bug_reports_message = lambda: ''
 
 ytdl_format_options = {
     'format': 'bestaudio/best',
     'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
     'restrictfilenames': True,
     'noplaylist': True,
+    'flatplaylist':True,
+    'geobypass':True,
     'nocheckcertificate': True,
-    'ignoreerrors': False,
+    'ignoreerrors': True,
     'logtostderr': False,
     'quiet': True,
     'no_warnings': True,
@@ -28,7 +30,7 @@ ffmpeg_options = {
     "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
 }
 
-ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+ytdl = yt_dlp.YoutubeDL(ytdl_format_options)
 
 class YTDLSource(discord.PCMVolumeTransformer):
     """
@@ -86,8 +88,11 @@ class MusicAPI():
         if trigger.startswith('$play'):
             url = command.lstrip().rstrip()
             music = self.play_from_url(url)
-            embed = makeSongEmbed('Queueing', music, colour=discord.Colour.blue())
-            response = [music, embed]
+            if isinstance(music, str):
+                response = music
+            else:
+                embed = makeSongEmbed('Queueing', music, colour=discord.Colour.blue())
+                response = [music, embed]
         
         if self.client.voice_client is not None:
 

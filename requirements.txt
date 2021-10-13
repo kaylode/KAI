@@ -11,3 +11,4 @@ wikipedia
 SpeechRecognition
 lyrics-extractor
 discord-together
+yt-dlp
