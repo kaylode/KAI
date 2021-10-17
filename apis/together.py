@@ -2,7 +2,7 @@ import discord
 import asyncio
 from .base import API
 from utils.utils import makeEmbed
-from discordTogether import DiscordTogether
+from discord_together import DiscordTogether
 
 ACTIVITIES = ("youtube","poker","betrayal","fishing","chess")
 
