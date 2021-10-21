@@ -50,7 +50,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.dislike_count = '{:,}'.format(int(data.get('dislike_count')))
 
     @classmethod
-    def from_url(cls, url, *, loop=None, stream=False):
+    def from_url(cls, url, *, loop=None, stream=False, volume=0.5):
         loop = loop or asyncio.get_event_loop()
         data = ytdl.extract_info(url, download=not stream)
 
@@ -59,7 +59,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
             data = data['entries'][0]
 
         filename = data['url'] if stream else ytdl.prepare_filename(data)
-        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
+        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data, volume=volume)
 
 class MusicAPI():
     """
@@ -76,6 +76,7 @@ class MusicAPI():
             "$shuffle", "$remove"]
 
         self.client = client
+        self.volume = 0.5
 
     async def do_command(self, command, trigger):
         """
@@ -177,25 +178,26 @@ class MusicAPI():
 
             # Example call: $volume 50
             if trigger.startswith('$volume'):
-                # voice = get(client.voice_clients, guild=ctx.guild)  
+                new_volume = None
                 if command.isnumeric():
                     volume = int(command)
                     if 0 <= volume <= 100:                              
-                        if self.client.voice_client.is_playing():                          
+                        if self.client.voice_client.is_playing():
                             new_volume = volume / 100                   
-                            self.client.voice_client.source.volume = new_volume
                             response = '💗'
                 else:
                     if command == 'up':
                         current_volume = self.client.voice_client.source.volume
                         new_volume = min(1.0, current_volume+0.2)
-                        self.client.voice_client.source.volume = new_volume
                         response = '💗'
                     if command == 'down':
                         current_volume = self.client.voice_client.source.volume
                         new_volume = max(0.0, current_volume-0.2)
-                        self.client.voice_client.source.volume = new_volume
                         response = '💗'
+
+                if new_volume is not None:
+                    self.volume = new_volume
+                    self.client.voice_client.source.volume = new_volume
 
             # Voice on/off
             if trigger.startswith('$voice'):
@@ -217,7 +219,7 @@ class MusicAPI():
         Plays from a url (almost anything youtube_dl supports)
         """
         try:
-            response = YTDLSource.from_url(url, loop=None, stream=True)
+            response = YTDLSource.from_url(url, loop=None, stream=True, volume=self.volume)
         except:
             response = "Không tìm thấy bài hát"
         
