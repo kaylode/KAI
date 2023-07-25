@@ -7,7 +7,7 @@ authors = ["kaylode <<>>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 discord = "^1.7.3"
-Flask = "^2.0.1"
+Flask = "^2.2.5"
 replit = "^3.1.0"
 googletrans = "^3.0.0"
 Unidecode = "^1.2.0"
